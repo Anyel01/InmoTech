@@ -1,0 +1,37 @@
+# Entornos virtuales Python
+venv/
+.venv/
+env/
+ENV/
+instance/
+
+# Archivos de caché Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Archivos de configuración local y credenciales
+.env
+
+# Logs y bases temporales
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editores y sistemas operativos
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Bases de datos locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos temporales
+*.tmp

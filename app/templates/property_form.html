@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if modo == 'editar' %}Editar Inmueble - InmoTech{% else %}Publicar Nuevo Inmueble - InmoTech{% endif %}
+{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <a href="{{ url_for('routes.seller_properties') }}" class="btn btn-outline btn-sm">&larr; Volver a Mis Inmuebles</a>
+</div>
+
+<div class="form-card" style="max-width: 800px;">
+    <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">
+            {% if modo == 'editar' %}{{ ico('editar') }} Modificar Datos del Inmueble{% else %}{{ ico('apartamento') }} Publicar Nuevo Inmueble{% endif %}
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Diligencia la información detallada para publicar tu propiedad en el catálogo
+        </p>
+    </div>
+
+    <form method="POST" action="{% if modo == 'editar' %}{{ url_for('routes.edit_property', id_inmueble=inmueble.id_inmueble) }}{% else %}{{ url_for('routes.create_property') }}{% endif %}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="form-group">
+            <label for="titulo" class="form-label">Título de la Publicación *</label>
+            <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Ej: Apartamento con Balcón en Chapinero Alto" value="{{ inmueble.titulo if inmueble else '' }}" maxlength="200" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion" class="form-label">Descripción Detallada *</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" rows="4" placeholder="Describe los acabados, comodidades, iluminación y ventajas de la propiedad..." required>{{ inmueble.descripcion if inmueble else '' }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="operacion" class="form-label">Tipo de Operación *</label>
+                <select id="operacion" name="operacion" class="form-select" required>
+                    <option value="VENTA" {% if inmueble and inmueble.operacion == 'VENTA' %}selected{% endif %}>Venta</option>
+                    <option value="ARRIENDO" {% if inmueble and inmueble.operacion == 'ARRIENDO' %}selected{% endif %}>Arriendo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="id_categoria" class="form-label">Categoría *</label>
+                <select id="id_categoria" name="id_categoria" class="form-select" required>
+                    <option value="">-- Seleccionar Categoría --</option>
+                    {% for cat in categorias %}
+                        <option value="{{ cat.id_categoria }}" {% if inmueble and inmueble.id_categoria == cat.id_categoria %}selected{% endif %}>
+                            {{ cat.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="precio" class="form-label">Precio en Pesos Colombianos (COP) *</label>
+                <input type="number" id="precio" name="precio" class="form-control" placeholder="Ej: 350000000" min="1" step="1000" value="{{ inmueble.precio if inmueble else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="area" class="form-label">Área en Metros Cuadrados (m²) *</label>
+                <input type="number" id="area" name="area" class="form-control" placeholder="Ej: 75.5" min="1" step="0.01" value="{{ inmueble.area if inmueble else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="habitaciones" class="form-label">Número de Habitaciones *</label>
+                <input type="number" id="habitaciones" name="habitaciones" class="form-control" placeholder="0" min="0" value="{{ inmueble.habitaciones if inmueble else 0 }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="banos" class="form-label">Número de Baños *</label>
+                <input type="number" id="banos" name="banos" class="form-control" placeholder="0" min="0" value="{{ inmueble.banos if inmueble else 0 }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_departamento" class="form-label">Departamento *</label>
+                <select id="id_departamento" name="id_departamento" class="form-select" required>
+                    <option value="">-- Seleccionar Departamento --</option>
+                    {% for dep in departamentos %}
+                        <option value="{{ dep.id_departamento }}" {% if inmueble and inmueble.id_departamento == dep.id_departamento %}selected{% endif %}>
+                            {{ dep.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="id_ciudad" class="form-label">Ciudad *</label>
+                <select id="id_ciudad" name="id_ciudad" class="form-select" required>
+                    <option value="">-- Seleccionar Ciudad --</option>
+                    {% for c in ciudades %}
+                        <option value="{{ c.id_ciudad }}" {% if inmueble and inmueble.id_ciudad == c.id_ciudad %}selected{% endif %}>
+                            {{ c.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="direccion" class="form-label">Dirección Completa *</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej: Carrera 7 # 71-21 Torre A Apto 502" value="{{ inmueble.direccion if inmueble else '' }}" maxlength="200" required>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+            <a href="{{ url_for('routes.seller_properties') }}" class="btn btn-outline">Cancelar</a>
+            <button type="submit" class="btn btn-primary" style="padding: 0.7rem 1.8rem;">
+                {% if modo == 'editar' %}Guardar Cambios{% else %}Publicar Inmueble{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

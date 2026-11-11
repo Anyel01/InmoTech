@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - InmoTech Portal Inmobiliario{% endblock %}
+
+{% block content %}
+<section class="home-hero">
+    <div class="home-hero-content">
+        <span class="hero-kicker">Espacios para una nueva etapa</span>
+        <h1>Tu próxima historia empieza en algún lugar.</h1>
+        <p>Encuentra hogares y locales en Colombia, explora cada opción a tu ritmo y coordina una visita directamente con quien la publica.</p>
+        <div class="hero-actions">
+        <a href="{{ url_for('routes.catalog') }}" class="btn btn-accent" style="padding: 0.8rem 1.6rem; font-size: 1.05rem;">
+            Explorar inmuebles
+        </a>
+        {% if not is_authenticated %}
+            <a href="{{ url_for('routes.register') }}" class="btn btn-outline" style="color: white; border-color: rgba(255,255,255,0.4); padding: 0.8rem 1.6rem; font-size: 1.05rem;">
+                Crear Cuenta de Comprador
+            </a>
+        {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="section-heading">
+        <div>
+            <h2>Cada espacio, una posibilidad</h2>
+            <p>Explora por tipo de propiedad y encuentra la que encaje contigo.</p>
+        </div>
+    </div>
+    <div class="category-grid">
+        {% for cat in categorias %}
+            <a href="{{ url_for('routes.catalog', categoria=cat.id_categoria) }}">
+                <div class="category-card">
+                    <span>
+                        {{ ico_categoria(cat.nombre) }}
+                    </span>
+                    <h3>{{ cat.nombre }}</h3>
+                    <span class="category-link">Ver disponibles &rarr;</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="section-heading">
+        <div>
+            <h2>Hallazgos recientes</h2>
+            <p>Propiedades disponibles, recién llegadas al catálogo.</p>
+        </div>
+        <a href="{{ url_for('routes.catalog') }}" class="btn btn-outline btn-sm">Ver todos</a>
+    </div>
+
+    {% if destacados %}
+        <div class="properties-grid">
+            {% for inmueble in destacados %}
+                <div class="property-card">
+                    <div class="property-header">
+                        <span class="property-type-icon">
+                            {{ ico_categoria(inmueble.categoria) }}
+                        </span>
+                        <span class="property-badge-op">{{ inmueble.operacion }}</span>
+                        <span class="property-badge-cat">{{ inmueble.categoria }}</span>
+                    </div>
+                    <div class="property-body">
+                        <div class="property-price">{{ inmueble.precio | cop }}</div>
+                        <h3 class="property-title">{{ inmueble.titulo }}</h3>
+                        <p class="property-location">{{ ico('ubicacion') }} {{ inmueble.ciudad }}, {{ inmueble.departamento }}</p>
+                        <p class="property-desc-short">{{ inmueble.descripcion }}</p>
+                        <div class="property-features">
+                            <span class="feature-item">{{ ico('area') }} {{ inmueble.area }} m²</span>
+                            {% if inmueble.habitaciones > 0 %}
+                                <span class="feature-item">{{ ico('cama') }} {{ inmueble.habitaciones }} hab</span>
+                            {% endif %}
+                            {% if inmueble.banos > 0 %}
+                                <span class="feature-item">{{ ico('ducha') }} {{ inmueble.banos }} baños</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="property-footer">
+                        <span class="badge badge-disponible">{{ inmueble.estado }}</span>
+                        <a href="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}" class="btn btn-primary btn-sm">
+                            Ver Detalle
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="form-card" style="text-align: center;">
+            <p style="color: var(--text-muted);">No hay inmuebles disponibles en este momento.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

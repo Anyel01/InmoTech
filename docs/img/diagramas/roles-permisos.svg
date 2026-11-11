@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="900" height="520" fill="#f3f0e8"/>
+  <text x="450" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Qué puede hacer cada rol</text>
+
+  <!-- encabezado -->
+  <rect x="30" y="56" width="840" height="44" rx="10" fill="#183c3a"/>
+  <text x="50" y="84" font-size="14" font-weight="700" fill="#fffdf8">Acción</text>
+  <text x="520" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Visitante</text>
+  <text x="640" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Comprador</text>
+  <text x="760" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Vendedor</text>
+  <text x="846" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8"></text>
+
+  <g font-size="13.5" fill="#202b29">
+    <rect x="30" y="100" width="840" height="36" fill="#fffdf8"/>
+    <text x="50" y="123">Ver inicio, catálogo y detalle de inmuebles</text>
+    <rect x="30" y="136" width="840" height="36" fill="#f3f0e8"/>
+    <text x="50" y="159">Registrarse (siempre queda como COMPRADOR)</text>
+    <rect x="30" y="172" width="840" height="36" fill="#fffdf8"/>
+    <text x="50" y="195">Solicitar una visita a un inmueble disponible</text>
+    <rect x="30" y="208" width="840" height="36" fill="#f3f0e8"/>
+    <text x="50" y="231">Ver y cancelar mis solicitudes pendientes</text>
+    <rect x="30" y="244" width="840" height="36" fill="#fffdf8"/>
+    <text x="50" y="267">Publicar un inmueble</text>
+    <rect x="30" y="280" width="840" height="36" fill="#f3f0e8"/>
+    <text x="50" y="303">Editar o pausar mis propios inmuebles</text>
+    <rect x="30" y="316" width="840" height="36" fill="#fffdf8"/>
+    <text x="50" y="339">Ver las visitas que recibieron mis inmuebles</text>
+    <rect x="30" y="352" width="840" height="36" fill="#f3f0e8"/>
+    <text x="50" y="375">Confirmar, rechazar o marcar como realizada una visita</text>
+  </g>
+
+  <!-- marcas: si = circulo verde, no = guion gris -->
+  <g stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-width="3">
+    <!-- fila 1 -->
+    <path d="M512 118l5 5 10-11" stroke="#32735b"/><path d="M632 118l5 5 10-11" stroke="#32735b"/><path d="M752 118l5 5 10-11" stroke="#32735b"/>
+    <!-- fila 2 -->
+    <path d="M512 154l5 5 10-11" stroke="#32735b"/><path d="M634 154h12" stroke="#bdb9ab"/><path d="M754 154h12" stroke="#bdb9ab"/>
+    <!-- fila 3 -->
+    <path d="M514 190h12" stroke="#bdb9ab"/><path d="M632 190l5 5 10-11" stroke="#32735b"/><path d="M754 190h12" stroke="#bdb9ab"/>
+    <!-- fila 4 -->
+    <path d="M514 226h12" stroke="#bdb9ab"/><path d="M632 226l5 5 10-11" stroke="#32735b"/><path d="M754 226h12" stroke="#bdb9ab"/>
+    <!-- fila 5 -->
+    <path d="M514 262h12" stroke="#bdb9ab"/><path d="M634 262h12" stroke="#bdb9ab"/><path d="M752 262l5 5 10-11" stroke="#32735b"/>
+    <!-- fila 6 -->
+    <path d="M514 298h12" stroke="#bdb9ab"/><path d="M634 298h12" stroke="#bdb9ab"/><path d="M752 298l5 5 10-11" stroke="#32735b"/>
+    <!-- fila 7 -->
+    <path d="M514 334h12" stroke="#bdb9ab"/><path d="M634 334h12" stroke="#bdb9ab"/><path d="M752 334l5 5 10-11" stroke="#32735b"/>
+    <!-- fila 8 -->
+    <path d="M514 370h12" stroke="#bdb9ab"/><path d="M634 370h12" stroke="#bdb9ab"/><path d="M752 370l5 5 10-11" stroke="#32735b"/>
+  </g>
+
+  <rect x="30" y="410" width="840" height="84" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+  <text x="50" y="436" font-size="13.5" font-weight="700" fill="#183c3a">Cómo se aplica en el código</text>
+  <text x="50" y="458" font-size="12.5" fill="#202b29">El decorador @role_required('VENDEDOR') o @role_required('COMPRADOR') de auth.py protege cada ruta.</text>
+  <text x="50" y="476" font-size="12.5" fill="#202b29">Además, los servicios comprueban que el inmueble o la visita pertenezcan al usuario de la sesión.</text>
+</svg>

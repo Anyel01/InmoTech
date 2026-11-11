@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Visitas Recibidas - InmoTech{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; color: var(--primary);">Solicitudes de Visitas Recibidas</h1>
+    <p style="color: var(--text-muted);">Gestiona las citas programadas por compradores interesados en tus inmuebles</p>
+</div>
+
+{% if visitas %}
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Inmueble</th>
+                    <th>Comprador Solicitante</th>
+                    <th>Fecha y Hora</th>
+                    <th>Mensaje del Cliente</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Acciones de Gestión</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in visitas %}
+                    <tr>
+                        <td>
+                            <strong>{{ v.inmueble_titulo }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                {{ ico('ubicacion') }} {{ v.inmueble_ciudad }} &bull; {{ v.inmueble_direccion }}
+                            </div>
+                        </td>
+                        <td>
+                            <strong>{{ v.comprador_nombre }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                {{ ico('telefono') }} {{ v.comprador_telefono }}<br>
+                                {{ ico('correo') }} {{ v.comprador_correo }}
+                            </div>
+                        </td>
+                        <td style="font-weight: 600;">
+                            {{ v.fecha_visita | fecha }}
+                        </td>
+                        <td style="font-size: 0.85rem; color: #475569; max-width: 230px;">
+                            {{ v.mensaje if v.mensaje else '— Sin mensaje adicional —' }}
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ v.estado|lower }}">
+                                {{ v.estado }}
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div style="display: inline-flex; gap: 0.35rem; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
+                                {% if v.estado == 'PENDIENTE' %}
+                                    <form method="POST" action="{{ url_for('routes.update_visit_status', id_visita=v.id_visita) }}" style="display: inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <input type="hidden" name="estado" value="CONFIRMADA">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            {{ ico('check') }} Confirmar
+                                        </button>
+                                    </form>
+
+                                    <form method="POST" action="{{ url_for('routes.update_visit_status', id_visita=v.id_visita) }}" style="display: inline;" data-confirm="¿Rechazar esta solicitud de visita?">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <input type="hidden" name="estado" value="CANCELADA">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            {{ ico('cerrar') }} Rechazar
+                                        </button>
+                                    </form>
+                                {% elif v.estado == 'CONFIRMADA' %}
+                                    <form method="POST" action="{{ url_for('routes.update_visit_status', id_visita=v.id_visita) }}" style="display: inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <input type="hidden" name="estado" value="REALIZADA">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            {{ ico('check') }} Realizada
+                                        </button>
+                                    </form>
+
+                                    <form method="POST" action="{{ url_for('routes.update_visit_status', id_visita=v.id_visita) }}" style="display: inline;" data-confirm="¿Cancelar esta visita confirmada?">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <input type="hidden" name="estado" value="CANCELADA">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            Cancelar
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span style="font-size: 0.82rem; color: var(--text-muted); font-style: italic;">
+                                        Finalizada
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="form-card" style="text-align: center; margin-top: 2rem;">
+        <div class="ico-grande">{{ ico('bandeja') }}</div>
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">No tienes solicitudes pendientes</h2>
+        <p style="color: var(--text-muted);">Las solicitudes de visitas que los compradores envíen a tus inmuebles aparecerán aquí para que las confirmes.</p>
+    </div>
+{% endif %}
+{% endblock %}

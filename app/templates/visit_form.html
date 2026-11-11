@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Agendar Visita - InmoTech{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <a href="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}" class="btn btn-outline btn-sm">&larr; Volver al Inmueble</a>
+</div>
+
+<div class="form-card" style="max-width: 650px;">
+    <div style="text-align: center; margin-bottom: 1.8rem;">
+        <div class="ico-grande">{{ ico('calendario') }}</div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">Solicitar Visita al Inmueble</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Coordina una cita presencial con el propietario para conocer la propiedad
+        </p>
+    </div>
+
+    <div style="background-color: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.8rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.3rem;">
+            {{ inmueble.titulo }}
+        </h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            {{ ico('ubicacion') }} {{ inmueble.direccion }}, {{ inmueble.ciudad }} ({{ inmueble.departamento }})
+        </p>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border-color); padding-top: 0.6rem; font-size: 0.9rem;">
+            <span>Valor: <strong style="color: var(--primary);">{{ inmueble.precio | cop }}</strong></span>
+            <span>Vendedor: <strong>{{ inmueble.vendedor_nombre }}</strong></span>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('routes.request_visit', id_inmueble=inmueble.id_inmueble) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="form-group">
+            <label for="fecha_visita" class="form-label">Fecha y Hora Propuesta para la Visita *</label>
+            <input type="datetime-local" id="fecha_visita" name="fecha_visita" class="form-control" required autofocus>
+            <small style="color: var(--text-muted); margin-top: 0.3rem; font-size: 0.8rem;">
+                La fecha y hora debe ser posterior al momento actual.
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="mensaje" class="form-label">Mensaje o Pregunta para el Vendedor (Opcional)</label>
+            <textarea id="mensaje" name="mensaje" class="form-control" rows="3" placeholder="Ej: Buenas tardes, me gustaría conocer detalles de los costos de administración y si es posible revisar las zonas comunes durante la visita..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+            <a href="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}" class="btn btn-outline">Cancelar</a>
+            <button type="submit" class="btn btn-accent" style="padding: 0.7rem 1.8rem;">
+                Enviar Solicitud de Visita
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

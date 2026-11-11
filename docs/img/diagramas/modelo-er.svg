@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="Segoe UI, Arial, sans-serif">
+<rect width="1000" height="760" fill="#f3f0e8"/>
+<text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Modelo entidad-relación de InmoTech</text>
+<path d="M155 134 L155 230" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="161" y="150" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="161" y="224" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M270 271.0 L320 271.0 L320 475.0 L380 475.0" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="326" y="373.0" font-size="11" fill="#687571">vende</text>
+<text x="274" y="266.0" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="366" y="470.0" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M120 414 L120 691.0 L380 691.0" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="126" y="552.5" font-size="11" fill="#687571">solicita</text>
+<text x="126" y="430" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="366" y="686.0" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M495 486 L495 540" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="501" y="517.0" font-size="11" fill="#687571">recibe</text>
+<text x="501" y="501" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="501" y="534" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M720 101.0 L665 101.0 L665 431.0 L610 431.0" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="706" y="96.0" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="615" y="426.0" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M720 271.0 L685 271.0 L685 453.0 L610 453.0" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="706" y="266.0" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="615" y="468.0" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M835 400 L835 326" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="841" y="394" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="841" y="342" font-size="12" font-weight="700" fill="#d26045">N</text>
+<rect x="40" y="60" width="230" height="74" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M40 90 V70 a10 10 0 0 1 10 -10 H260 a10 10 0 0 1 10 10 V90 Z" fill="#183c3a"/>
+<text x="54" y="80" font-size="15" font-weight="700" fill="#fffdf8">rol</text>
+<text x="54" y="105" font-size="12.5" fill="#202b29">id_rol</text>
+<text x="256" y="105" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="41" y="112" width="228" height="22" fill="#f3f0e8"/>
+<text x="54" y="127" font-size="12.5" fill="#202b29">nombre</text>
+<text x="256" y="127" text-anchor="end" font-size="11" font-weight="700" fill="#32735b">UQ</text>
+<rect x="40" y="60" width="230" height="74" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="40" y="230" width="230" height="184" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M40 260 V240 a10 10 0 0 1 10 -10 H260 a10 10 0 0 1 10 10 V260 Z" fill="#183c3a"/>
+<text x="54" y="250" font-size="15" font-weight="700" fill="#fffdf8">usuario</text>
+<text x="54" y="275" font-size="12.5" fill="#202b29">id_usuario</text>
+<text x="256" y="275" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="41" y="282" width="228" height="22" fill="#f3f0e8"/>
+<text x="54" y="297" font-size="12.5" fill="#202b29">nombre</text>
+<text x="54" y="319" font-size="12.5" fill="#202b29">apellido</text>
+<rect x="41" y="326" width="228" height="22" fill="#f3f0e8"/>
+<text x="54" y="341" font-size="12.5" fill="#202b29">correo</text>
+<text x="256" y="341" text-anchor="end" font-size="11" font-weight="700" fill="#32735b">UQ</text>
+<text x="54" y="363" font-size="12.5" fill="#202b29">password_hash</text>
+<rect x="41" y="370" width="228" height="22" fill="#f3f0e8"/>
+<text x="54" y="385" font-size="12.5" fill="#202b29">telefono</text>
+<text x="54" y="407" font-size="12.5" fill="#202b29">id_rol</text>
+<text x="256" y="407" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="40" y="230" width="230" height="184" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="380" y="170" width="230" height="316" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M380 200 V180 a10 10 0 0 1 10 -10 H600 a10 10 0 0 1 10 10 V200 Z" fill="#183c3a"/>
+<text x="394" y="190" font-size="15" font-weight="700" fill="#fffdf8">inmueble</text>
+<text x="394" y="215" font-size="12.5" fill="#202b29">id_inmueble</text>
+<text x="596" y="215" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="381" y="222" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="237" font-size="12.5" fill="#202b29">titulo</text>
+<text x="394" y="259" font-size="12.5" fill="#202b29">descripcion</text>
+<rect x="381" y="266" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="281" font-size="12.5" fill="#202b29">direccion</text>
+<text x="394" y="303" font-size="12.5" fill="#202b29">precio</text>
+<rect x="381" y="310" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="325" font-size="12.5" fill="#202b29">area</text>
+<text x="394" y="347" font-size="12.5" fill="#202b29">habitaciones</text>
+<rect x="381" y="354" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="369" font-size="12.5" fill="#202b29">banos</text>
+<text x="394" y="391" font-size="12.5" fill="#202b29">operacion</text>
+<rect x="381" y="398" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="413" font-size="12.5" fill="#202b29">estado</text>
+<text x="394" y="435" font-size="12.5" fill="#202b29">id_categoria</text>
+<text x="596" y="435" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="381" y="442" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="457" font-size="12.5" fill="#202b29">id_ciudad</text>
+<text x="596" y="457" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<text x="394" y="479" font-size="12.5" fill="#202b29">id_vendedor</text>
+<text x="596" y="479" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="380" y="170" width="230" height="316" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="380" y="540" width="230" height="162" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M380 570 V550 a10 10 0 0 1 10 -10 H600 a10 10 0 0 1 10 10 V570 Z" fill="#183c3a"/>
+<text x="394" y="560" font-size="15" font-weight="700" fill="#fffdf8">visita</text>
+<text x="394" y="585" font-size="12.5" fill="#202b29">id_visita</text>
+<text x="596" y="585" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="381" y="592" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="607" font-size="12.5" fill="#202b29">fecha_visita</text>
+<text x="394" y="629" font-size="12.5" fill="#202b29">mensaje</text>
+<rect x="381" y="636" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="651" font-size="12.5" fill="#202b29">estado</text>
+<text x="394" y="673" font-size="12.5" fill="#202b29">id_inmueble</text>
+<text x="596" y="673" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="381" y="680" width="228" height="22" fill="#f3f0e8"/>
+<text x="394" y="695" font-size="12.5" fill="#202b29">id_comprador</text>
+<text x="596" y="695" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="380" y="540" width="230" height="162" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="720" y="60" width="230" height="74" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M720 90 V70 a10 10 0 0 1 10 -10 H940 a10 10 0 0 1 10 10 V90 Z" fill="#183c3a"/>
+<text x="734" y="80" font-size="15" font-weight="700" fill="#fffdf8">categoria</text>
+<text x="734" y="105" font-size="12.5" fill="#202b29">id_categoria</text>
+<text x="936" y="105" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="721" y="112" width="228" height="22" fill="#f3f0e8"/>
+<text x="734" y="127" font-size="12.5" fill="#202b29">nombre</text>
+<text x="936" y="127" text-anchor="end" font-size="11" font-weight="700" fill="#32735b">UQ</text>
+<rect x="720" y="60" width="230" height="74" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="720" y="230" width="230" height="96" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M720 260 V240 a10 10 0 0 1 10 -10 H940 a10 10 0 0 1 10 10 V260 Z" fill="#183c3a"/>
+<text x="734" y="250" font-size="15" font-weight="700" fill="#fffdf8">ciudad</text>
+<text x="734" y="275" font-size="12.5" fill="#202b29">id_ciudad</text>
+<text x="936" y="275" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="721" y="282" width="228" height="22" fill="#f3f0e8"/>
+<text x="734" y="297" font-size="12.5" fill="#202b29">nombre</text>
+<text x="734" y="319" font-size="12.5" fill="#202b29">id_departamento</text>
+<text x="936" y="319" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="720" y="230" width="230" height="96" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="720" y="400" width="230" height="74" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M720 430 V410 a10 10 0 0 1 10 -10 H940 a10 10 0 0 1 10 10 V430 Z" fill="#183c3a"/>
+<text x="734" y="420" font-size="15" font-weight="700" fill="#fffdf8">departamento</text>
+<text x="734" y="445" font-size="12.5" fill="#202b29">id_departamento</text>
+<text x="936" y="445" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="721" y="452" width="228" height="22" fill="#f3f0e8"/>
+<text x="734" y="467" font-size="12.5" fill="#202b29">nombre</text>
+<text x="936" y="467" text-anchor="end" font-size="11" font-weight="700" fill="#32735b">UQ</text>
+<rect x="720" y="400" width="230" height="74" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<text x="40" y="735" font-size="12" font-weight="700" fill="#d26045">PK</text><text x="62" y="735" font-size="12" fill="#687571">llave primaria</text>
+<text x="170" y="735" font-size="12" font-weight="700" fill="#376879">FK</text><text x="192" y="735" font-size="12" fill="#687571">llave foránea</text>
+<text x="290" y="735" font-size="12" font-weight="700" fill="#32735b">UQ</text><text x="314" y="735" font-size="12" fill="#687571">valor único</text>
+<text x="410" y="735" font-size="12" font-weight="700" fill="#d26045">1 / N</text><text x="452" y="735" font-size="12" fill="#687571">uno a muchos</text>
+</svg>

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Solicitudes de Visita — InmoTech{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; color: var(--primary);">Mis Solicitudes de Visita</h1>
+    <p style="color: var(--text-muted);">Historial de citas agendadas y su estado de confirmación por el vendedor</p>
+</div>
+
+{% if visitas %}
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Inmueble</th>
+                    <th>Vendedor</th>
+                    <th>Fecha y Hora</th>
+                    <th>Mensaje Enviado</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in visitas %}
+                    <tr>
+                        <td>
+                            <strong>{{ v.inmueble_titulo }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                {{ ico('ubicacion') }} {{ v.inmueble_ciudad }} &bull; {{ v.inmueble_operacion }} ({{ v.inmueble_precio | cop }})
+                            </div>
+                        </td>
+                        <td>
+                            <strong>{{ v.vendedor_nombre }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                {{ ico('telefono') }} {{ v.vendedor_telefono }}
+                            </div>
+                        </td>
+                        <td style="font-weight: 600;">
+                            {{ v.fecha_visita | fecha }}
+                        </td>
+                        <td style="font-size: 0.85rem; color: #475569; max-width: 250px;">
+                            {{ v.mensaje if v.mensaje else '— Sin mensaje adicional —' }}
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ v.estado|lower }}">
+                                {{ v.estado }}
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div style="display: inline-flex; gap: 0.4rem; align-items: center;">
+                                <a href="{{ url_for('routes.property_detail', id_inmueble=v.id_inmueble) }}" class="btn btn-outline btn-sm" title="Ver propiedad">
+                                    {{ ico('ojo') }}
+                                </a>
+
+                                {% if v.estado == 'PENDIENTE' %}
+                                    <form method="POST" action="{{ url_for('routes.cancel_visit', id_visita=v.id_visita) }}" style="display: inline;" data-confirm="¿Seguro que deseas cancelar esta solicitud de visita?">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            Cancelar
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">
+                                        No cancelable
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="form-card" style="text-align: center; margin-top: 2rem;">
+        <div class="ico-grande">{{ ico('calendario') }}</div>
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">No tienes visitas programadas</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Explora el catálogo inmobiliario y solicita visitas para conocer tus inmuebles favoritos.</p>
+        <a href="{{ url_for('routes.catalog') }}" class="btn btn-primary">
+            Explorar Catálogo
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

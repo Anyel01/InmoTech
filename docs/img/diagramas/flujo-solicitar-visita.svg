@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 590" font-family="Segoe UI, Arial, sans-serif">
+<defs><marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#202b29"/></marker></defs>
+<rect width="900" height="590" fill="#f3f0e8"/>
+<text x="450" y="32" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Recorrido de una solicitud de visita</text>
+<line x1="90" y1="104" x2="90" y2="570" stroke="#bdb9ab" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="18" y="52" width="144" height="52" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+<text x="90" y="75" text-anchor="middle" font-size="14" font-weight="700" fill="#202b29">Comprador</text>
+<text x="90" y="93" text-anchor="middle" font-size="11" fill="#202b29" opacity="0.85">navegador</text>
+<line x1="270" y1="104" x2="270" y2="570" stroke="#bdb9ab" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="198" y="52" width="144" height="52" rx="10" fill="#183c3a"/>
+<text x="270" y="75" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Rutas</text>
+<text x="270" y="93" text-anchor="middle" font-size="11" fill="#fffdf8" opacity="0.85">routes.py</text>
+<line x1="450" y1="104" x2="450" y2="570" stroke="#bdb9ab" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="378" y="52" width="144" height="52" rx="10" fill="#285a54"/>
+<text x="450" y="75" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Servicios</text>
+<text x="450" y="93" text-anchor="middle" font-size="11" fill="#fffdf8" opacity="0.85">services.py</text>
+<line x1="630" y1="104" x2="630" y2="570" stroke="#bdb9ab" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="558" y="52" width="144" height="52" rx="10" fill="#376879"/>
+<text x="630" y="75" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Repositorios</text>
+<text x="630" y="93" text-anchor="middle" font-size="11" fill="#fffdf8" opacity="0.85">repositories.py</text>
+<line x1="810" y1="104" x2="810" y2="570" stroke="#bdb9ab" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="738" y="52" width="144" height="52" rx="10" fill="#d26045"/>
+<text x="810" y="75" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Base de datos</text>
+<text x="810" y="93" text-anchor="middle" font-size="11" fill="#fffdf8" opacity="0.85">SQLite / MySQL</text>
+<line x1="98" y1="140" x2="262" y2="140" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+<text x="180.0" y="133" text-anchor="middle" font-size="12" fill="#202b29">POST fecha y mensaje</text>
+<circle cx="26" cy="140" r="11" fill="#d26045"/>
+<text x="26" y="144" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">1</text>
+<rect x="165.0" y="156" width="210" height="46" rx="8" fill="#f6ecd5" stroke="#986421" stroke-width="1.5"/>
+<text x="270" y="176" text-anchor="middle" font-size="12" fill="#202b29">Revisa sesión, rol COMPRADOR</text>
+<text x="270" y="192" text-anchor="middle" font-size="12" fill="#202b29">y token CSRF</text>
+<line x1="278" y1="232" x2="442" y2="232" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+<text x="360.0" y="225" text-anchor="middle" font-size="12" fill="#202b29">solicitar_visita(...)</text>
+<circle cx="26" cy="232" r="11" fill="#d26045"/>
+<text x="26" y="236" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">2</text>
+<line x1="458" y1="268" x2="622" y2="268" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+<text x="540.0" y="261" text-anchor="middle" font-size="12" fill="#202b29">find_by_id(inmueble)</text>
+<circle cx="26" cy="268" r="11" fill="#d26045"/>
+<text x="26" y="272" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">3</text>
+<line x1="638" y1="300" x2="802" y2="300" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+<text x="720.0" y="293" text-anchor="middle" font-size="12" fill="#202b29">SELECT con JOIN</text>
+<circle cx="26" cy="300" r="11" fill="#d26045"/>
+<text x="26" y="304" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">4</text>
+<line x1="802" y1="332" x2="458" y2="332" stroke="#202b29" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#f)"/>
+<text x="630.0" y="325" text-anchor="middle" font-size="12" fill="#202b29">fila del inmueble</text>
+<rect x="335.0" y="346" width="230" height="46" rx="8" fill="#f6ecd5" stroke="#986421" stroke-width="1.5"/>
+<text x="450" y="366" text-anchor="middle" font-size="12" fill="#202b29">Reglas: disponible, no es del mismo</text>
+<text x="450" y="382" text-anchor="middle" font-size="12" fill="#202b29">usuario y fecha futura</text>
+<circle cx="26" cy="370" r="11" fill="#d26045"/>
+<text x="26" y="374" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">5</text>
+<line x1="458" y1="420" x2="622" y2="420" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+<text x="540.0" y="413" text-anchor="middle" font-size="12" fill="#202b29">create(datos)</text>
+<circle cx="26" cy="420" r="11" fill="#d26045"/>
+<text x="26" y="424" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">6</text>
+<line x1="638" y1="452" x2="802" y2="452" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+<text x="720.0" y="445" text-anchor="middle" font-size="12" fill="#202b29">INSERT + commit</text>
+<circle cx="26" cy="452" r="11" fill="#d26045"/>
+<text x="26" y="456" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">7</text>
+<rect x="725.0" y="466" width="170" height="46" rx="8" fill="#f6ecd5" stroke="#986421" stroke-width="1.5"/>
+<text x="810" y="486" text-anchor="middle" font-size="12" fill="#202b29">estado = PENDIENTE</text>
+<text x="810" y="502" text-anchor="middle" font-size="12" fill="#202b29">por defecto</text>
+<line x1="442" y1="496" x2="278" y2="496" stroke="#202b29" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#f)"/>
+<text x="360.0" y="489" text-anchor="middle" font-size="12" fill="#202b29">id de la visita</text>
+<line x1="262" y1="530" x2="98" y2="530" stroke="#202b29" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#f)"/>
+<text x="180.0" y="523" text-anchor="middle" font-size="12" fill="#202b29">redirige a /mis-visitas</text>
+<circle cx="26" cy="530" r="11" fill="#d26045"/>
+<text x="26" y="534" text-anchor="middle" font-size="12" font-weight="700" fill="#fffdf8">8</text>
+<text x="450" y="570" text-anchor="middle" font-size="12" fill="#687571">Si una regla falla, el servicio lanza ValueError y la ruta lo muestra como mensaje sin tocar la base de datos.</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#687571"/>
+    </marker>
+  </defs>
+  <rect width="900" height="400" fill="#f3f0e8"/>
+  <text x="450" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Un mismo SQL para dos motores</text>
+
+  <rect x="30" y="110" width="210" height="130" rx="12" fill="#376879"/>
+  <text x="135" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#fffdf8">repositories.py</text>
+  <text x="135" y="172" text-anchor="middle" font-size="12" fill="#e1ecec">cursor.execute(</text>
+  <text x="135" y="190" text-anchor="middle" font-size="12" fill="#e1ecec">"... WHERE id = %s", (5,))</text>
+  <text x="135" y="216" text-anchor="middle" font-size="12" fill="#e1ecec">escrito una sola vez</text>
+
+  <line x1="240" y1="175" x2="300" y2="175" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+
+  <rect x="302" y="110" width="210" height="130" rx="12" fill="#d26045"/>
+  <text x="407" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#fffdf8">get_db_cursor()</text>
+  <text x="407" y="172" text-anchor="middle" font-size="12" fill="#fbe9e3">lee DB_DRIVER del .env</text>
+  <text x="407" y="192" text-anchor="middle" font-size="12" fill="#fbe9e3">abre la conexión</text>
+  <text x="407" y="212" text-anchor="middle" font-size="12" fill="#fbe9e3">commit o rollback al salir</text>
+
+  <line x1="512" y1="150" x2="590" y2="100" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <line x1="512" y1="200" x2="590" y2="270" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <text x="506" y="114" font-size="12" fill="#687571">sqlite</text>
+  <text x="506" y="268" font-size="12" fill="#687571">mysql</text>
+
+  <rect x="592" y="50" width="278" height="110" rx="12" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+  <text x="731" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#183c3a">Adaptador SQLite</text>
+  <text x="731" y="102" text-anchor="middle" font-size="12" fill="#202b29">%s  se traduce a  ?</text>
+  <text x="731" y="120" text-anchor="middle" font-size="12" fill="#202b29">%(nombre)s  se traduce a  :nombre</text>
+  <text x="731" y="138" text-anchor="middle" font-size="12" fill="#202b29">CONCAT() se registra como función</text>
+
+  <rect x="592" y="230" width="278" height="110" rx="12" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+  <text x="731" y="260" text-anchor="middle" font-size="15" font-weight="700" fill="#183c3a">mysql-connector</text>
+  <text x="731" y="282" text-anchor="middle" font-size="12" fill="#202b29">Usa los placeholders tal cual</text>
+  <text x="731" y="300" text-anchor="middle" font-size="12" fill="#202b29">Esquema: database/01 y 02 (.sql)</text>
+  <text x="731" y="318" text-anchor="middle" font-size="12" fill="#202b29">Consultas de apoyo: 03_consultas.sql</text>
+
+  <text x="450" y="378" text-anchor="middle" font-size="13" fill="#687571">Los repositorios no saben qué motor hay detrás: solo piden un cursor.</text>
+</svg>

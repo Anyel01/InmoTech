@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#687571"/>
+    </marker>
+  </defs>
+  <rect width="900" height="760" fill="#f3f0e8"/>
+  <text x="450" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Arquitectura en capas de InmoTech</text>
+
+  <rect x="300" y="64" width="300" height="52" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+  <text x="450" y="96" text-anchor="middle" font-size="16" font-weight="600" fill="#202b29">Navegador (HTML, CSS, JS)</text>
+  <line x1="450" y1="116" x2="450" y2="158" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <text x="462" y="142" font-size="12" fill="#687571">petición HTTP</text>
+
+  <rect x="250" y="160" width="400" height="86" rx="12" fill="#183c3a"/>
+  <text x="450" y="192" text-anchor="middle" font-size="17" font-weight="700" fill="#fffdf8">Rutas  (routes.py)</text>
+  <text x="450" y="214" text-anchor="middle" font-size="13" fill="#d9e4de">Recibe la petición, valida CSRF y rol,</text>
+  <text x="450" y="232" text-anchor="middle" font-size="13" fill="#d9e4de">y responde con una plantilla o una redirección</text>
+
+  <rect x="40" y="168" width="176" height="70" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+  <text x="128" y="194" text-anchor="middle" font-size="14" font-weight="600" fill="#202b29">Plantillas Jinja2</text>
+  <text x="128" y="214" text-anchor="middle" font-size="12" fill="#687571">templates/ y static/</text>
+  <line x1="250" y1="203" x2="218" y2="203" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+
+  <rect x="684" y="168" width="176" height="70" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+  <text x="772" y="194" text-anchor="middle" font-size="14" font-weight="600" fill="#202b29">auth.py</text>
+  <text x="772" y="214" text-anchor="middle" font-size="12" fill="#687571">sesión, roles y CSRF</text>
+  <line x1="650" y1="203" x2="682" y2="203" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+
+  <line x1="450" y1="246" x2="450" y2="290" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <text x="462" y="274" font-size="12" fill="#687571">datos del formulario</text>
+
+  <rect x="250" y="292" width="400" height="86" rx="12" fill="#285a54"/>
+  <text x="450" y="324" text-anchor="middle" font-size="17" font-weight="700" fill="#fffdf8">Servicios  (services.py)</text>
+  <text x="450" y="346" text-anchor="middle" font-size="13" fill="#d9e4de">Reglas de negocio y validaciones: precios, fechas,</text>
+  <text x="450" y="364" text-anchor="middle" font-size="13" fill="#d9e4de">dueño del inmueble, transiciones de estado</text>
+
+  <line x1="450" y1="378" x2="450" y2="422" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <text x="462" y="406" font-size="12" fill="#687571">datos ya validados</text>
+
+  <rect x="250" y="424" width="400" height="86" rx="12" fill="#376879"/>
+  <text x="450" y="456" text-anchor="middle" font-size="17" font-weight="700" fill="#fffdf8">Repositorios  (repositories.py)</text>
+  <text x="450" y="478" text-anchor="middle" font-size="13" fill="#e1ecec">Todo el SQL del proyecto, siempre parametrizado.</text>
+  <text x="450" y="496" text-anchor="middle" font-size="13" fill="#e1ecec">Una clase por entidad</text>
+
+  <line x1="450" y1="510" x2="450" y2="554" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <text x="462" y="538" font-size="12" fill="#687571">get_db_cursor()</text>
+
+  <rect x="250" y="556" width="400" height="64" rx="12" fill="#d26045"/>
+  <text x="450" y="584" text-anchor="middle" font-size="17" font-weight="700" fill="#fffdf8">Conexión  (db.py)</text>
+  <text x="450" y="604" text-anchor="middle" font-size="13" fill="#fbe9e3">Elige el motor según DB_DRIVER y maneja commit / rollback</text>
+
+  <line x1="380" y1="620" x2="320" y2="652" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+  <line x1="520" y1="620" x2="580" y2="652" stroke="#687571" stroke-width="2" marker-end="url(#f)"/>
+
+  <path d="M230 664v30c0 10 36 18 80 18s80-8 80-18v-30" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+  <ellipse cx="310" cy="664" rx="80" ry="14" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+  <text x="310" y="696" text-anchor="middle" font-size="14" font-weight="700" fill="#183c3a">SQLite</text>
+  <text x="310" y="740" text-anchor="middle" font-size="12" fill="#687571">desarrollo (por defecto)</text>
+
+  <path d="M500 664v30c0 10 36 18 80 18s80-8 80-18v-30" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+  <ellipse cx="580" cy="664" rx="80" ry="14" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+  <text x="580" y="696" text-anchor="middle" font-size="14" font-weight="700" fill="#183c3a">MySQL</text>
+  <text x="580" y="740" text-anchor="middle" font-size="12" fill="#687571">scripts en database/</text>
+</svg>

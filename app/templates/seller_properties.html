@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Inmuebles Publicados - InmoTech{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--primary);">Mis Publicaciones</h1>
+        <p style="color: var(--text-muted);">Administra la disponibilidad y edición de tus inmuebles en el portal</p>
+    </div>
+    <a href="{{ url_for('routes.create_property') }}" class="btn btn-accent">
+        {{ ico('mas') }} Publicar Nuevo Inmueble
+    </a>
+</div>
+
+{% if inmuebles %}
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Inmueble</th>
+                    <th>Ubicación</th>
+                    <th>Operación</th>
+                    <th>Precio</th>
+                    <th>Visitas</th>
+                    <th>Estado Actual</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inmuebles %}
+                    <tr>
+                        <td>
+                            <strong>{{ item.titulo }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                {{ item.categoria }} &bull; {{ item.area }} m² &bull; {{ item.habitaciones }} hab &bull; {{ item.banos }} baños
+                            </div>
+                        </td>
+                        <td>{{ item.ciudad }}, {{ item.departamento }}</td>
+                        <td>
+                            <span class="badge" style="background-color: #e2e8f0; color: #1e293b;">
+                                {{ item.operacion }}
+                            </span>
+                        </td>
+                        <td style="font-weight: 700; color: var(--primary);">
+                            {{ item.precio | cop }}
+                        </td>
+                        <td>
+                            <span style="font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.85rem; white-space: nowrap;">
+                                {{ ico('bandeja') }} {{ item.total_visitas }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ item.estado|lower|replace('_', '-') }}">
+                                {{ item.estado }}
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div style="display: inline-flex; gap: 0.4rem; align-items: center;">
+                                <a href="{{ url_for('routes.property_detail', id_inmueble=item.id_inmueble) }}" class="btn btn-outline btn-sm" title="Ver en catálogo">
+                                    {{ ico('ojo') }}
+                                </a>
+                                <a href="{{ url_for('routes.edit_property', id_inmueble=item.id_inmueble) }}" class="btn btn-primary btn-sm" title="Editar datos">
+                                    {{ ico('editar') }} Editar
+                                </a>
+
+                                <form method="POST" action="{{ url_for('routes.toggle_property_status', id_inmueble=item.id_inmueble) }}" style="display: inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    {% if item.estado == 'DISPONIBLE' %}
+                                        <input type="hidden" name="estado" value="NO_DISPONIBLE">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Pausar disponibilidad">
+                                            Pausar
+                                        </button>
+                                    {% else %}
+                                        <input type="hidden" name="estado" value="DISPONIBLE">
+                                        <button type="submit" class="btn btn-success btn-sm" title="Activar disponibilidad">
+                                            Activar
+                                        </button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="form-card" style="text-align: center; margin-top: 2rem;">
+        <div class="ico-grande">{{ ico('apartamento') }}</div>
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">Aún no has publicado inmuebles</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Comienza publicando tu primera propiedad para recibir solicitudes de visitas de compradores interesados.</p>
+        <a href="{{ url_for('routes.create_property') }}" class="btn btn-primary">
+            Publicar Inmueble Ahora
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

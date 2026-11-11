@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro de Comprador - InmoTech{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="ico-grande">{{ ico('documento') }}</div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">Crear Cuenta de Comprador</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Regístrate para solicitar y coordinar visitas a tus inmuebles de interés</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('routes.register') }}" id="form-registro">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre *</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej: Camilo" value="{{ form_data.get('nombre', '') }}" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="apellido" class="form-label">Apellido *</label>
+                <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Ej: Restrepo" value="{{ form_data.get('apellido', '') }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="correo" class="form-label">Correo Electrónico *</label>
+                <input type="email" id="correo" name="correo" class="form-control" placeholder="ejemplo@correo.com" value="{{ form_data.get('correo', '') }}" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono" class="form-label">Teléfono Móvil *</label>
+                <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ej: 3001234567" value="{{ form_data.get('telefono', '') }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="password" class="form-label">Contraseña (Mín. 6 caracteres) *</label>
+                <input type="password" id="password" name="password" class="form-control" minlength="6" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password" class="form-label">Confirmar Contraseña *</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="6" placeholder="Repite tu contraseña" required>
+            </div>
+        </div>
+
+        <div style="background-color: #f8fafc; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.2rem;">
+            {{ ico('info') }} Tu cuenta será asignada con el perfil oficial de <strong>COMPRADOR</strong> para agendar visitas a los inmuebles publicados.
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.8rem;">
+            Crear mi Cuenta de Comprador
+        </button>
+    </form>
+
+    <div style="margin-top: 1.8rem; padding-top: 1.2rem; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.9rem;">
+        <p style="color: var(--text-muted);">
+            ¿Ya tienes una cuenta registrada? 
+            <a href="{{ url_for('routes.login') }}" style="color: var(--accent); font-weight: 600; text-decoration: none;">
+                Inicia sesión aquí
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

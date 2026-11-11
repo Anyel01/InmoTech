@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#202b29"/>
+    </marker>
+  </defs>
+  <rect width="900" height="380" fill="#f3f0e8"/>
+  <text x="450" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Ciclo de vida de una visita</text>
+
+  <circle cx="44" cy="150" r="9" fill="#202b29"/>
+  <line x1="54" y1="150" x2="92" y2="150" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+  <text x="48" y="118" text-anchor="middle" font-size="11" fill="#687571">el comprador</text>
+  <text x="48" y="131" text-anchor="middle" font-size="11" fill="#687571">la solicita</text>
+
+  <rect x="94" y="116" width="170" height="68" rx="34" fill="#f6ecd5" stroke="#986421" stroke-width="2"/>
+  <text x="179" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#986421">PENDIENTE</text>
+  <text x="179" y="166" text-anchor="middle" font-size="11" fill="#687571">esperando respuesta</text>
+
+  <line x1="264" y1="150" x2="388" y2="150" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+  <text x="326" y="140" text-anchor="middle" font-size="12" fill="#202b29">el vendedor</text>
+  <text x="326" y="168" text-anchor="middle" font-size="12" fill="#202b29">confirma</text>
+
+  <rect x="390" y="116" width="170" height="68" rx="34" fill="#e1ecec" stroke="#376879" stroke-width="2"/>
+  <text x="475" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#376879">CONFIRMADA</text>
+  <text x="475" y="166" text-anchor="middle" font-size="11" fill="#687571">cita acordada</text>
+
+  <line x1="560" y1="150" x2="690" y2="150" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+  <text x="625" y="140" text-anchor="middle" font-size="12" fill="#202b29">el vendedor</text>
+  <text x="625" y="168" text-anchor="middle" font-size="12" fill="#202b29">la marca realizada</text>
+
+  <rect x="692" y="116" width="170" height="68" rx="34" fill="#e2efe5" stroke="#32735b" stroke-width="2"/>
+  <text x="777" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#32735b">REALIZADA</text>
+  <text x="777" y="166" text-anchor="middle" font-size="11" fill="#687571">estado final</text>
+
+  <!-- hacia CANCELADA -->
+  <path d="M179 184 V270 H388" fill="none" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+  <text x="190" y="226" font-size="12" fill="#202b29">el comprador cancela</text>
+  <text x="190" y="242" font-size="12" fill="#202b29">o el vendedor rechaza</text>
+
+  <text x="487" y="220" font-size="12" fill="#202b29">el vendedor cancela</text>
+  <line x1="475" y1="184" x2="475" y2="244" stroke="#202b29" stroke-width="2" marker-end="url(#f)"/>
+
+  <rect x="390" y="246" width="170" height="68" rx="34" fill="#f5e1dc" stroke="#a33e36" stroke-width="2"/>
+  <text x="475" y="276" text-anchor="middle" font-size="16" font-weight="700" fill="#a33e36">CANCELADA</text>
+  <text x="475" y="296" text-anchor="middle" font-size="11" fill="#687571">estado final</text>
+
+  <text x="450" y="352" text-anchor="middle" font-size="12" fill="#687571">Desde CANCELADA o REALIZADA ya no se puede cambiar nada (lo valida VisitaService).</text>
+</svg>
