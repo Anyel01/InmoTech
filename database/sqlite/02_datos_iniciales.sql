@@ -1,5 +1,3 @@
--- InmoTech - datos iniciales para SQLite (equivalente a ../02_datos_iniciales.sql).
--- Solo se cargan cuando la tabla rol esta vacia. Clave de los usuarios de prueba: 123456
 
 INSERT INTO rol (id_rol, nombre) VALUES
     (1, 'ADMINISTRADOR'), (2, 'VENDEDOR'), (3, 'COMPRADOR');

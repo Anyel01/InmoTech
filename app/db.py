@@ -1,5 +1,3 @@
-
-
 import os
 import re
 import sqlite3
@@ -64,14 +62,8 @@ class SQLiteConnection:
         self._conexion.close()
 
 
-# ------------------------------------------------------------------------------
-# SQLite
-# ------------------------------------------------------------------------------
 def _inicializar_sqlite(conexion):
-    """
-    Crea las tablas (si no existen) y carga los datos de prueba la primera vez.
-    Los scripts viven en database/sqlite/ para no tener SQL pegado en el código.
-    """
+
     global _sqlite_listo
 
     with _sqlite_lock:
@@ -98,8 +90,7 @@ def _conectar_sqlite():
 
     conexion = sqlite3.connect(ruta)
     conexion.row_factory = sqlite3.Row
-    conexion.execute('PRAGMA foreign_keys = ON')  # SQLite no valida FK si no se activa
-    # MySQL trae CONCAT() y SQLite no; la registramos para reutilizar las mismas consultas
+    conexion.execute('PRAGMA foreign_keys = ON')
     conexion.create_function(
         'CONCAT', -1,
         lambda *valores: ''.join('' if v is None else str(v) for v in valores)
@@ -108,11 +99,8 @@ def _conectar_sqlite():
     return SQLiteConnection(conexion)
 
 
-# ------------------------------------------------------------------------------
-# MySQL
-# ------------------------------------------------------------------------------
+
 def get_db_config():
-    """Parámetros de conexión a MySQL, leídos de las variables de entorno."""
     return {
         'host': os.environ.get('DB_HOST', 'localhost'),
         'port': int(os.environ.get('DB_PORT', 3306)),
@@ -135,9 +123,7 @@ def _conectar_mysql():
         raise
 
 
-# ------------------------------------------------------------------------------
-# API pública
-# ------------------------------------------------------------------------------
+
 def get_raw_connection():
     """Abre una conexión nueva con el motor indicado en DB_DRIVER."""
     driver = os.environ.get('DB_DRIVER', 'sqlite').strip().lower()
@@ -148,19 +134,6 @@ def get_raw_connection():
 
 @contextmanager
 def get_db_cursor(commit=False):
-    """
-    Entrega un cursor y se encarga de cerrar todo al terminar.
-
-    - commit=True: confirma los cambios si el bloque termina bien.
-    - Si ocurre cualquier excepción hace rollback y la vuelve a lanzar.
-
-        with get_db_cursor() as cursor:                  # lectura
-            cursor.execute("SELECT ...", params)
-            filas = cursor.fetchall()
-
-        with get_db_cursor(commit=True) as cursor:       # escritura
-            cursor.execute("INSERT ...", params)
-    """
     conexion = None
     cursor = None
     try:

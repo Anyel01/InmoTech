@@ -296,3 +296,66 @@ def update_visit_status(id_visita):
 def get_ciudades_by_departamento(id_departamento):
     ciudades = UbicacionCategoriaRepository.get_ciudades(id_departamento=id_departamento)
     return jsonify(ciudades)
+
+
+@routes_bp.route('/recuperar-password', methods=['GET', 'POST'])
+def recuperar_password():
+
+    if request.method == 'POST':
+
+        correo = request.form.get('correo', '').strip().lower()
+
+        try:
+            UsuarioService.generar_token_recuperacion(correo)
+
+            flash(
+                'Si el correo está registrado, recibirás un enlace de recuperación.',
+                'success'
+            )
+
+            return redirect(url_for('routes.login'))
+
+        except Exception:
+            flash(
+                'No fue posible procesar la solicitud. Intenta nuevamente.',
+                'danger'
+            )
+
+    return render_template('recuperar_password.html')
+
+
+@routes_bp.route('/restablecer-password/<token>', methods=['GET', 'POST'])
+def restablecer_password(token):
+
+    if request.method == 'POST':
+
+        nueva_password = request.form.get('password', '')
+        confirmar_password = request.form.get('confirm_password', '')
+
+        try:
+            UsuarioService.restablecer_password(
+                token,
+                nueva_password,
+                confirmar_password
+            )
+
+            flash(
+                'Tu contraseña ha sido actualizada correctamente.',
+                'success'
+            )
+
+            return redirect(url_for('routes.login'))
+
+        except ValueError as error:
+            flash(str(error), 'danger')
+
+        except Exception:
+            flash(
+                'Ocurrió un error al actualizar la contraseña.',
+                'danger'
+            )
+
+    return render_template(
+        'restablecer_password.html',
+        token=token
+    )

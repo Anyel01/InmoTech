@@ -23,6 +23,17 @@
             <input type="password" id="password" name="password" class="form-control" placeholder="Tu contraseña" required>
         </div>
 
+                <div style="text-align: right; margin-top: 0.5rem;">
+
+            <a href="{{ url_for('routes.recuperar_password') }}"
+            style="color: var(--accent); font-size: 0.9rem; text-decoration: none;">
+
+                ¿Olvidaste tu contraseña?
+
+            </a>
+
+        </div>
+
         <button type="submit" class="btn btn-primary btn-block" style="padding: 0.8rem; margin-top: 1rem;">
             Entrar a mi Cuenta
         </button>

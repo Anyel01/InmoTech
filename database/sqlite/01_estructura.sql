@@ -1,5 +1,4 @@
--- InmoTech - esquema para SQLite (equivalente a ../01_estructura.sql de MySQL).
--- Se ejecuta en cada arranque; por eso todo es IF NOT EXISTS.
+
 
 CREATE TABLE IF NOT EXISTS rol (
     id_rol INTEGER PRIMARY KEY,

@@ -10,6 +10,9 @@ from app.repositories import (
     UbicacionCategoriaRepository
 )
 
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from flask import current_app, url_for
+from flask_mail import Message
 
 class UsuarioService:
 
@@ -26,7 +29,6 @@ class UsuarioService:
         password = password or ''
         confirm_password = confirm_password or ''
 
-        # Validaciones de presencia
         if not nombre or not apellido or not correo or not telefono or not password:
             raise ValueError("Todos los campos del formulario son obligatorios.")
 
@@ -71,6 +73,95 @@ class UsuarioService:
             raise ValueError("Credenciales inválidas. Verifique su correo y contraseña.")
 
         return usuario
+    
+    @classmethod
+    def generar_token_recuperacion(cls, correo):
+
+        correo = (correo or '').strip().lower()
+
+        usuario = UsuarioRepository.find_id_by_correo(correo)
+
+        if not usuario:
+            return None
+
+        serializer = URLSafeTimedSerializer(
+            current_app.config['SECRET_KEY']
+        )
+
+        token = serializer.dumps(
+            usuario['id_usuario'],
+            salt='recuperacion-password'
+        )
+
+        enlace = url_for(
+            'routes.restablecer_password',
+            token=token,
+            _external=True
+        )
+
+        mail = current_app.extensions['mail']
+
+        mensaje = Message(
+            subject='Recuperación de contraseña - InmoTech',
+            recipients=[correo]
+        )
+
+        mensaje.body = f"""
+    Hola,
+
+    Hemos recibido una solicitud para restablecer tu contraseña.
+
+    Ingresa al siguiente enlace:
+
+    {enlace}
+
+    Este enlace tiene una validez de 15 minutos.
+
+    Si no solicitaste este cambio, ignora este correo.
+
+    Equipo InmoTech.
+    """
+
+        mail.send(mensaje)
+
+        return True
+
+
+    @classmethod
+    def restablecer_password(cls, token, nueva_password, confirmar_password):
+
+        if not nueva_password or not confirmar_password:
+            raise ValueError("Todos los campos son obligatorios.")
+
+        if len(nueva_password) < 6:
+            raise ValueError("La contraseña debe tener al menos 6 caracteres.")
+
+        if nueva_password != confirmar_password:
+            raise ValueError("Las contraseñas no coinciden.")
+
+        serializer = URLSafeTimedSerializer(
+            current_app.config['SECRET_KEY']
+        )
+
+        try:
+            id_usuario = serializer.loads(
+                token,
+                salt='recuperacion-password',
+                max_age=900
+            )
+
+        except SignatureExpired:
+            raise ValueError("El enlace ha expirado. Solicita uno nuevo.")
+
+        except BadSignature:
+            raise ValueError("El enlace no es válido.")
+
+        password_hash = generate_password_hash(nueva_password)
+
+        UsuarioRepository.update_password(
+            id_usuario,
+            password_hash
+        )
 
 
 class InmuebleService:

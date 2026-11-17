@@ -76,12 +76,35 @@ class UsuarioRepository:
                 telefono.strip()
             ))
             return cursor.lastrowid
+    
+    @staticmethod
+    def update_password(id_usuario, password_hash):
+        sql = """
+            UPDATE usuario
+            SET password_hash = %s
+            WHERE id_usuario = %s;
+        """
+
+        with get_db_cursor(commit=True) as cursor:
+            cursor.execute(sql, (password_hash, id_usuario))
+
+
+    @staticmethod
+    def find_id_by_correo(correo):
+        sql = """
+            SELECT id_usuario, correo
+            FROM usuario
+            WHERE correo = %s
+            LIMIT 1;
+        """
+
+        with get_db_cursor() as cursor:
+            cursor.execute(sql, (correo.strip().lower(),))
+            return cursor.fetchone()
 
 
 class InmuebleRepository:
-    """
-    Repositorio para operaciones sobre la tabla `inmueble`.
-    """
+
 
     @staticmethod
     def find_all_disponibles(filtros=None):

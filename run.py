@@ -4,10 +4,9 @@ import os
 
 from dotenv import load_dotenv
 
-# El .env debe cargarse antes de crear la app para que la configuración lo vea
 load_dotenv()
 
-from app import create_app  # noqa: E402
+from app import create_app
 
 app = create_app()
 
