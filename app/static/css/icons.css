@@ -48,3 +48,14 @@
 .ico-telefono { -webkit-mask-image: url('../img/icons/telefono.svg'); mask-image: url('../img/icons/telefono.svg'); }
 .ico-ubicacion { -webkit-mask-image: url('../img/icons/ubicacion.svg'); mask-image: url('../img/icons/ubicacion.svg'); }
 .ico-usuario { -webkit-mask-image: url('../img/icons/usuario.svg'); mask-image: url('../img/icons/usuario.svg'); }
+.ico-flecha-izq { -webkit-mask-image: url('../img/icons/flecha-izq.svg'); mask-image: url('../img/icons/flecha-izq.svg'); }
+.ico-flecha-der { -webkit-mask-image: url('../img/icons/flecha-der.svg'); mask-image: url('../img/icons/flecha-der.svg'); }
+.ico-ampliar { -webkit-mask-image: url('../img/icons/ampliar.svg'); mask-image: url('../img/icons/ampliar.svg'); }
+.ico-foto { -webkit-mask-image: url('../img/icons/foto.svg'); mask-image: url('../img/icons/foto.svg'); }
+.ico-subir { -webkit-mask-image: url('../img/icons/subir.svg'); mask-image: url('../img/icons/subir.svg'); }
+.ico-papelera { -webkit-mask-image: url('../img/icons/papelera.svg'); mask-image: url('../img/icons/papelera.svg'); }
+.ico-panel { -webkit-mask-image: url('../img/icons/panel.svg'); mask-image: url('../img/icons/panel.svg'); }
+.ico-usuarios { -webkit-mask-image: url('../img/icons/usuarios.svg'); mask-image: url('../img/icons/usuarios.svg'); }
+.ico-catalogo { -webkit-mask-image: url('../img/icons/catalogo.svg'); mask-image: url('../img/icons/catalogo.svg'); }
+.ico-descargar { -webkit-mask-image: url('../img/icons/descargar.svg'); mask-image: url('../img/icons/descargar.svg'); }
+.ico-escudo { -webkit-mask-image: url('../img/icons/escudo.svg'); mask-image: url('../img/icons/escudo.svg'); }

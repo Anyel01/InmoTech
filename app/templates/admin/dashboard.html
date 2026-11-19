@@ -1,0 +1,188 @@
+{% extends 'admin/_layout.html' %}
+
+{% block title %}Resumen - Administración - InmoTech{% endblock %}
+{% block admin_titulo %}Resumen{% endblock %}
+{% block admin_subtitulo %}<p>El estado del portal de un vistazo.</p>{% endblock %}
+
+{% block admin_cuerpo %}
+{% set v = datos.visitas %}
+{% set pendientes = v.por_estado[0].total %}
+
+{# ------------------------------------------------------------ cifras clave #}
+<section class="cifras" aria-label="Cifras clave">
+    <article class="cifra cifra-principal">
+        <h2>Inmuebles disponibles</h2>
+        <p class="cifra-valor">{{ datos.inmuebles.disponibles }}</p>
+        <p class="cifra-detalle">
+            de {{ datos.inmuebles.total }} publicados · {{ datos.inmuebles.venta }} en venta · {{ datos.inmuebles.arriendo }} en arriendo
+        </p>
+        <a href="{{ url_for('admin.inmuebles') }}" class="cifra-enlace">Ver inmuebles</a>
+    </article>
+
+    <article class="cifra">
+        <h2>Usuarios</h2>
+        <p class="cifra-valor">{{ datos.usuarios.total }}</p>
+        <p class="cifra-detalle">
+            {{ datos.usuarios.por_rol.get('COMPRADOR', 0) }} compradores · {{ datos.usuarios.por_rol.get('VENDEDOR', 0) }} vendedores · {{ datos.usuarios.por_rol.get('ADMINISTRADOR', 0) }} admin.
+        </p>
+        <a href="{{ url_for('admin.usuarios') }}" class="cifra-enlace">Ver usuarios</a>
+    </article>
+
+    <article class="cifra">
+        <h2>Visitas pendientes</h2>
+        <p class="cifra-valor">{{ pendientes }}</p>
+        <p class="cifra-detalle">esperando respuesta del vendedor, de {{ v.total }} en total</p>
+        <a href="{{ url_for('admin.visitas', estado='PENDIENTE') }}" class="cifra-enlace">Ver pendientes</a>
+    </article>
+
+    <article class="cifra{% if datos.inmuebles.sin_fotos %} cifra-atencion{% endif %}">
+        <h2>Inmuebles sin fotos</h2>
+        <p class="cifra-valor">{{ datos.inmuebles.sin_fotos }}</p>
+        <p class="cifra-detalle">{% if datos.inmuebles.sin_fotos %}se ven con un icono en vez de foto{% else %}todos tienen al menos una foto{% endif %}</p>
+    </article>
+
+    <article class="cifra{% if datos.usuarios.bloqueados %} cifra-atencion{% endif %}">
+        <h2>Cuentas bloqueadas</h2>
+        <p class="cifra-valor">{{ datos.usuarios.bloqueados }}</p>
+        <p class="cifra-detalle">{% if datos.usuarios.bloqueados %}no pueden iniciar sesión{% else %}ninguna por ahora{% endif %}</p>
+        {% if datos.usuarios.bloqueados %}<a href="{{ url_for('admin.usuarios', estado='bloqueados') }}" class="cifra-enlace">Ver cuentas</a>{% endif %}
+    </article>
+</section>
+
+{# ------------------------------------------------------------ gráficos #}
+<div class="graficos">
+    <section class="grafico" aria-labelledby="g-categorias">
+        <h2 id="g-categorias">Inmuebles disponibles por categoría</h2>
+        <p class="grafico-nota">Precio promedio entre paréntesis.</p>
+        {% if datos.categorias %}
+            <ul class="barras">
+                {% for c in datos.categorias %}
+                    <li>
+                        <span class="barras-etiqueta">{{ c.categoria }}</span>
+                        <span class="barras-pista">
+                            {% if c.total %}<span class="barras-barra" style="--ancho: {{ c.ancho }}"></span>{% endif %}
+                            <span class="barras-valor">{{ c.total }}{% if c.total %} <small>({{ c.precio_promedio | cop }})</small>{% endif %}</span>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="vacio">Todavía no hay categorías.</p>
+        {% endif %}
+    </section>
+
+    <section class="grafico" aria-labelledby="g-ciudades">
+        <h2 id="g-ciudades">Ciudades con más inmuebles disponibles</h2>
+        <p class="grafico-nota">Las seis primeras.</p>
+        {% if datos.ciudades %}
+            <ul class="barras">
+                {% for c in datos.ciudades %}
+                    <li>
+                        <span class="barras-etiqueta">{{ c.ciudad }}</span>
+                        <span class="barras-pista">
+                            <span class="barras-barra" style="--ancho: {{ c.ancho }}"></span>
+                            <span class="barras-valor">{{ c.total }}</span>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="vacio">Todavía no hay inmuebles disponibles.</p>
+        {% endif %}
+    </section>
+
+    <section class="grafico" aria-labelledby="g-visitas">
+        <h2 id="g-visitas">Visitas por estado</h2>
+        {% if v.total %}
+            <div class="segmentos" role="img" aria-label="Visitas por estado: {% for e in v.por_estado %}{{ e.estado|lower }} {{ e.total }}{% if not loop.last %}, {% endif %}{% endfor %}">
+                {% for e in v.por_estado if e.total %}
+                    <span class="segmento segmento-{{ e.estado|lower }}" style="flex-grow: {{ e.total }}">{% if e.porcentaje >= 12 %}{{ e.porcentaje }}%{% endif %}</span>
+                {% endfor %}
+            </div>
+            <ul class="leyenda">
+                {% for e in v.por_estado %}
+                    <li><span class="leyenda-muestra segmento-{{ e.estado|lower }}"></span>{{ e.estado|capitalize }}</li>
+                {% endfor %}
+            </ul>
+            <details class="tabla-alterna">
+                <summary>Ver como tabla</summary>
+                <table class="data-table">
+                    <thead><tr><th>Estado</th><th>Visitas</th><th>Porcentaje</th></tr></thead>
+                    <tbody>
+                        {% for e in v.por_estado %}
+                            <tr><td>{{ e.estado|capitalize }}</td><td>{{ e.total }}</td><td>{{ e.porcentaje }}%</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </details>
+        {% else %}
+            <p class="vacio">Todavía no hay visitas solicitadas.</p>
+        {% endif %}
+    </section>
+
+    <section class="grafico" aria-labelledby="g-roles">
+        <h2 id="g-roles">Usuarios por rol</h2>
+        {% set mayor = datos.usuarios.por_rol.values()|max %}
+        <ul class="barras">
+            {% for rol, total in datos.usuarios.por_rol.items() %}
+                <li>
+                    <span class="barras-etiqueta">{{ rol|capitalize }}</span>
+                    <span class="barras-pista">
+                        {% if total %}<span class="barras-barra" style="--ancho: {{ (total * 100 / mayor)|round|int }}"></span>{% endif %}
+                        <span class="barras-valor">{{ total }}</span>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+
+{# ------------------------------------------------------------ actividad reciente #}
+<div class="recientes">
+    <section class="reciente" aria-labelledby="r-visitados">
+        <h2 id="r-visitados">Inmuebles con más visitas</h2>
+        {% if datos.mas_visitados %}
+            <ol class="lista-simple">
+                {% for i in datos.mas_visitados %}
+                    <li>
+                        <a href="{{ url_for('routes.property_detail', id_inmueble=i.id_inmueble) }}">{{ i.titulo }}</a>
+                        <span>{{ i.ciudad }} · {{ i.total_visitas }} visita{{ '' if i.total_visitas == 1 else 's' }}</span>
+                    </li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p class="vacio">Aún no hay visitas.</p>
+        {% endif %}
+    </section>
+
+    <section class="reciente" aria-labelledby="r-visitas">
+        <h2 id="r-visitas">Últimas visitas solicitadas</h2>
+        {% if datos.ultimas_visitas %}
+            <ul class="lista-simple">
+                {% for x in datos.ultimas_visitas %}
+                    <li>
+                        <span><strong>{{ x.titulo }}</strong></span>
+                        <span>{{ x.comprador }} · {{ x.fecha_visita | fecha }} <span class="badge badge-{{ x.estado|lower }}">{{ x.estado }}</span></span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('admin.visitas') }}" class="reciente-enlace">Ver todas las visitas</a>
+        {% else %}
+            <p class="vacio">Aún no hay visitas.</p>
+        {% endif %}
+    </section>
+
+    <section class="reciente" aria-labelledby="r-usuarios">
+        <h2 id="r-usuarios">Últimos usuarios</h2>
+        <ul class="lista-simple">
+            {% for u in datos.ultimos_usuarios %}
+                <li>
+                    <span><strong>{{ u.nombre }} {{ u.apellido }}</strong></span>
+                    <span>{{ u.correo }} · <span class="badge badge-rol-{{ u.rol_nombre|lower }}">{{ u.rol_nombre }}</span>{% if not u.activo %} <span class="badge badge-bloqueada">Bloqueada</span>{% endif %}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('admin.usuarios') }}" class="reciente-enlace">Ver todos los usuarios</a>
+    </section>
+</div>
+{% endblock %}

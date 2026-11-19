@@ -1,0 +1,119 @@
+{% extends 'admin/_layout.html' %}
+{% from 'admin/_macros.html' import paginador, boton_accion with context %}
+
+{% block title %}Inmuebles - Administración - InmoTech{% endblock %}
+{% block admin_titulo %}Inmuebles{% endblock %}
+{% block admin_subtitulo %}<p>Todas las publicaciones del portal, de cualquier vendedor.</p>{% endblock %}
+{% block admin_acciones %}
+    <a href="{{ url_for('admin.inmuebles_exportar', **request.args) }}" class="btn btn-outline btn-sm">{{ ico('descargar') }} Exportar CSV</a>
+{% endblock %}
+
+{% block admin_cuerpo %}
+<form method="GET" action="{{ url_for('admin.inmuebles') }}" class="filter-bar admin-filtros" role="search">
+    <div class="filter-grid">
+        <div class="form-group">
+            <label for="f-q" class="form-label">Buscar</label>
+            <input type="search" id="f-q" name="q" class="form-control" placeholder="Título o vendedor" value="{{ filtros.q }}">
+        </div>
+        <div class="form-group">
+            <label for="f-estado" class="form-label">Estado</label>
+            <select id="f-estado" name="estado" class="form-select">
+                <option value="">Todos</option>
+                {% for e in estados %}<option value="{{ e }}"{% if filtros.estado == e %} selected{% endif %}>{{ 'Disponible' if e == 'DISPONIBLE' else 'Pausado' }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="f-operacion" class="form-label">Operación</label>
+            <select id="f-operacion" name="operacion" class="form-select">
+                <option value="">Todas</option>
+                {% for o in operaciones %}<option value="{{ o }}"{% if filtros.operacion == o %} selected{% endif %}>{{ o|capitalize }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="f-categoria" class="form-label">Categoría</label>
+            <select id="f-categoria" name="id_categoria" class="form-select">
+                <option value="">Todas</option>
+                {% for c in opciones.categorias %}<option value="{{ c.id_categoria }}"{% if filtros.id_categoria == c.id_categoria %} selected{% endif %}>{{ c.nombre }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="f-ciudad" class="form-label">Ciudad</label>
+            <select id="f-ciudad" name="id_ciudad" class="form-select">
+                <option value="">Todas</option>
+                {% for c in opciones.ciudades %}<option value="{{ c.id_ciudad }}"{% if filtros.id_ciudad == c.id_ciudad %} selected{% endif %}>{{ c.nombre }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="f-vendedor" class="form-label">Vendedor</label>
+            <select id="f-vendedor" name="id_vendedor" class="form-select">
+                <option value="">Todos</option>
+                {% for v in opciones.vendedores %}<option value="{{ v.id_usuario }}"{% if filtros.id_vendedor == v.id_usuario %} selected{% endif %}>{{ v.nombre }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="admin-filtros-botones">
+            <a href="{{ url_for('admin.inmuebles') }}" class="btn btn-outline btn-sm">Quitar filtros</a>
+            <button type="submit" class="btn btn-primary btn-sm">{{ ico('buscar') }} Filtrar</button>
+        </div>
+    </div>
+</form>
+
+{% if inmuebles %}
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Inmueble</th>
+                    <th>Vendedor</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Visitas</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in inmuebles %}
+                    <tr>
+                        <td>
+                            <div class="tabla-foto">
+                                {% if i.portada %}
+                                    <img src="{{ url_for('static', filename=i.portada) }}" alt="" width="72" height="46" loading="lazy">
+                                {% else %}
+                                    <span class="tabla-foto-vacia">{{ ico_categoria(i.categoria) }}</span>
+                                {% endif %}
+                                <div>
+                                    <strong>{{ i.titulo }}</strong>
+                                    <div class="celda-secundaria">{{ i.categoria }} en {{ i.operacion|lower }} · {{ i.ciudad }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td title="{{ i.vendedor_correo }}">{{ i.vendedor_nombre }}</td>
+                        <td class="celda-precio">{{ i.precio | cop }}</td>
+                        <td><span class="badge badge-{{ i.estado|lower|replace('_', '-') }}">{{ 'DISPONIBLE' if i.estado == 'DISPONIBLE' else 'PAUSADO' }}</span></td>
+                        <td>{{ i.total_visitas }}</td>
+                        <td>
+                            <div class="acciones-fila">
+                                <a href="{{ url_for('routes.property_detail', id_inmueble=i.id_inmueble) }}" class="btn btn-outline btn-sm" aria-label="Ver {{ i.titulo }} en el sitio">{{ ico('ojo') }}</a>
+                                <a href="{{ url_for('admin.inmueble_editar', id_inmueble=i.id_inmueble) }}" class="btn btn-outline btn-sm">{{ ico('editar') }} Editar</a>
+                                {% if i.estado == 'DISPONIBLE' %}
+                                    {{ boton_accion(url_for('admin.inmueble_estado', id_inmueble=i.id_inmueble), 'Pausar', 'btn-outline', 'Pausar «' ~ i.titulo ~ '»? Dejará de aparecer en el catálogo.', {'estado': 'NO_DISPONIBLE'}) }}
+                                {% else %}
+                                    {{ boton_accion(url_for('admin.inmueble_estado', id_inmueble=i.id_inmueble), 'Publicar', 'btn-success', None, {'estado': 'DISPONIBLE'}) }}
+                                {% endif %}
+                                {% if not i.total_visitas %}
+                                    {{ boton_accion(url_for('admin.inmueble_eliminar', id_inmueble=i.id_inmueble), 'Eliminar', 'btn-danger', 'Eliminar «' ~ i.titulo ~ '» y sus fotos? Esta acción no se puede deshacer.', None, 'papelera') }}
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ paginador(pagina) }}
+{% else %}
+    <div class="form-card vacio-tarjeta">
+        <p>Ningún inmueble coincide con estos filtros. Prueba con otra ciudad o quita los filtros.</p>
+        <a href="{{ url_for('admin.inmuebles') }}" class="btn btn-outline btn-sm">Quitar filtros</a>
+    </div>
+{% endif %}
+{% endblock %}

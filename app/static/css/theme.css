@@ -2,8 +2,8 @@
   color-scheme: light;
   --primary: #183c3a;
   --primary-hover: #285a54;
-  --accent: #d26045;
-  --accent-hover: #b94a36;
+  --accent: #b5472f;
+  --accent-hover: #963a28;
   --bg-main: #f3f0e8;
   --bg-card: #fffdf8;
   --text-dark: #202b29;
@@ -34,7 +34,7 @@ body {
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(ellipse at 4% 12%, rgba(210, 96, 69, .08), transparent 28rem),
+    radial-gradient(ellipse at 4% 12%, rgba(181, 71, 47, .08), transparent 28rem),
     radial-gradient(ellipse at 93% 48%, rgba(54, 105, 121, .08), transparent 32rem),
     repeating-linear-gradient(0deg, rgba(24, 60, 58, .018) 0, rgba(24, 60, 58, .018) 1px, transparent 1px, transparent 5px),
     var(--bg-main);
@@ -54,7 +54,7 @@ body::before {
 
 ::selection {
   color: #fffdf8;
-  background: #d26045;
+  background: var(--accent);
 }
 
 a {
@@ -84,7 +84,7 @@ a {
   place-items: center;
   border: 1px solid rgba(255, 255, 255, .22);
   border-radius: 14px 5px 14px 5px;
-  background: #d26045;
+  background: var(--accent);
   font-size: 1rem;
 }
 
@@ -109,7 +109,7 @@ a {
 }
 
 .role-tag {
-  background: #d26045;
+  background: var(--accent);
 }
 
 .main-wrapper {
@@ -377,7 +377,7 @@ a {
 
 .property-card:hover {
   transform: translateY(-6px) rotate(-.25deg);
-  border-color: rgba(210, 96, 69, .4);
+  border-color: rgba(181, 71, 47, .4);
   box-shadow: var(--shadow-lg);
 }
 
@@ -430,7 +430,7 @@ a {
 }
 
 .property-badge-cat {
-  background: #d26045;
+  background: var(--accent);
 }
 
 .property-price {
@@ -482,7 +482,7 @@ textarea.form-control {
 .form-control:focus,
 .form-select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(210, 96, 69, .14);
+  box-shadow: 0 0 0 4px rgba(181, 71, 47, .14);
 }
 
 .form-label {
@@ -601,7 +601,7 @@ textarea.form-control {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(210, 96, 69, .65);
+  outline: 3px solid rgba(181, 71, 47, .65);
   outline-offset: 3px;
 }
 

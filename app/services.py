@@ -1,12 +1,15 @@
 
 
 import re
+import uuid
 from datetime import datetime
+from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.repositories import (
     UsuarioRepository,
     InmuebleRepository,
     VisitaRepository,
+    ImagenRepository,
     UbicacionCategoriaRepository
 )
 
@@ -71,6 +74,9 @@ class UsuarioService:
 
         if not check_password_hash(usuario['password_hash'], password):
             raise ValueError("Credenciales inválidas. Verifique su correo y contraseña.")
+
+        if not usuario['activo']:
+            raise ValueError("Tu cuenta está bloqueada. Comunícate con el administrador para reactivarla.")
 
         return usuario
     
@@ -162,6 +168,131 @@ class UsuarioService:
             id_usuario,
             password_hash
         )
+
+
+class ImagenService:
+    """Validación y almacenamiento de las fotos de los inmuebles."""
+
+    MAX_FOTOS = 8
+    MAX_BYTES = 4 * 1024 * 1024
+    EXTENSIONES = {'jpg', 'jpeg', 'png', 'webp'}
+    CARPETA = 'uploads/inmuebles'  # relativa a static/
+
+    @classmethod
+    def _tipo_por_contenido(cls, cabecera):
+        """Reconoce el formato por los primeros bytes; la extensión sola no basta."""
+        if cabecera.startswith(b'\xff\xd8\xff'):
+            return 'jpg'
+        if cabecera.startswith(b'\x89PNG\r\n\x1a\n'):
+            return 'png'
+        if cabecera[:4] == b'RIFF' and cabecera[8:12] == b'WEBP':
+            return 'webp'
+        return None
+
+    @classmethod
+    def preparar(cls, archivos, cupo):
+        """
+        Revisa las fotos recibidas sin guardar nada todavía.
+        Devuelve una lista de (bytes, extension). Lanza ValueError si alguna no sirve.
+        """
+        validas = []
+        for archivo in archivos or []:
+            nombre = archivo.filename if archivo else ''
+            if not nombre:
+                continue  # el campo de archivos llegó vacío
+
+            extension = nombre.rsplit('.', 1)[-1].lower() if '.' in nombre else ''
+            if extension not in cls.EXTENSIONES:
+                raise ValueError(f'"{nombre}" no es una foto compatible. Usa archivos JPG, PNG o WebP.')
+
+            contenido = archivo.read(cls.MAX_BYTES + 1)
+            if len(contenido) > cls.MAX_BYTES:
+                raise ValueError(f'"{nombre}" pesa más de 4 MB. Reduce su tamaño y vuelve a elegirla.')
+
+            tipo = cls._tipo_por_contenido(contenido[:12])
+            if tipo is None:
+                raise ValueError(f'"{nombre}" no es una imagen JPG, PNG o WebP válida.')
+
+            validas.append((contenido, tipo))
+
+        if len(validas) > max(cupo, 0):
+            raise ValueError(
+                f"Cada inmueble admite hasta {cls.MAX_FOTOS} fotos. "
+                f"Puedes agregar {max(cupo, 0)} más."
+            )
+        return validas
+
+    @classmethod
+    def _carpeta_destino(cls):
+        carpeta = Path(current_app.static_folder) / cls.CARPETA
+        carpeta.mkdir(parents=True, exist_ok=True)
+        return carpeta
+
+    @classmethod
+    def guardar(cls, id_inmueble, fotos, primer_orden):
+        """Escribe los archivos y registra las fotos en la base de datos."""
+        if not fotos:
+            return
+        carpeta = cls._carpeta_destino()
+        escritos = []
+        filas = []
+        try:
+            for posicion, (contenido, extension) in enumerate(fotos):
+                nombre = f'{uuid.uuid4().hex}.{extension}'
+                (carpeta / nombre).write_bytes(contenido)
+                escritos.append(carpeta / nombre)
+                filas.append((f'{cls.CARPETA}/{nombre}', '', primer_orden + posicion))
+            ImagenRepository.create_many(id_inmueble, filas)
+        except Exception:
+            for archivo in escritos:
+                archivo.unlink(missing_ok=True)
+            raise
+
+    @classmethod
+    def _borrar_archivo(cls, ruta):
+        """Solo borra archivos subidos por vendedores; las fotos de ejemplo no se tocan."""
+        if not ruta.startswith(cls.CARPETA + '/'):
+            return
+        carpeta = cls._carpeta_destino().resolve()
+        archivo = (Path(current_app.static_folder) / ruta).resolve()
+        if archivo.parent == carpeta:
+            archivo.unlink(missing_ok=True)
+
+    @classmethod
+    def actualizar(cls, id_inmueble, fotos_nuevas, quitar, portada):
+        """
+        Aplica los cambios de la edición: quita fotos, pone la portada y suma las nuevas.
+        quitar: ids de fotos a eliminar. portada: id de la foto que debe quedar primera.
+        """
+        existentes = ImagenRepository.find_by_inmueble(id_inmueble)
+        a_quitar = [f for f in existentes if f['id_imagen'] in quitar]
+        restantes = [f['id_imagen'] for f in existentes if f['id_imagen'] not in quitar]
+
+        if portada in restantes:
+            restantes.remove(portada)
+            restantes.insert(0, portada)
+
+        ImagenRepository.delete_many(id_inmueble, [f['id_imagen'] for f in a_quitar])
+        for foto in a_quitar:
+            cls._borrar_archivo(foto['ruta'])
+
+        ImagenRepository.reordenar(id_inmueble, restantes)
+        cls.guardar(id_inmueble, fotos_nuevas, len(restantes) + 1)
+
+    @staticmethod
+    def ids_desde_formulario(valores):
+        """Convierte la lista de ids que llega del formulario, ignorando lo que no sea número."""
+        ids = set()
+        for valor in valores or []:
+            try:
+                ids.add(int(valor))
+            except (TypeError, ValueError):
+                pass
+        return ids
+
+    @classmethod
+    def listar(cls, id_inmueble):
+        return ImagenRepository.find_by_inmueble(id_inmueble)
 
 
 class InmuebleService:
@@ -300,14 +431,18 @@ class InmuebleService:
         }
 
     @classmethod
-    def publicar_inmueble(cls, id_vendedor, form_data):
+    def publicar_inmueble(cls, id_vendedor, form_data, archivos=()):
         datos = cls.validar_y_estructurar_datos(form_data)
+        fotos = ImagenService.preparar(archivos, ImagenService.MAX_FOTOS)
+
         datos['id_vendedor'] = id_vendedor
         datos['estado'] = 'DISPONIBLE'
-        return InmuebleRepository.create(datos)
+        id_inmueble = InmuebleRepository.create(datos)
+        ImagenService.guardar(id_inmueble, fotos, 1)
+        return id_inmueble
 
     @classmethod
-    def editar_inmueble(cls, id_inmueble, id_vendedor, form_data):
+    def editar_inmueble(cls, id_inmueble, id_vendedor, form_data, archivos=(), quitar=(), portada=None):
         inmueble = InmuebleRepository.find_by_id(id_inmueble)
         if not inmueble:
             raise ValueError("El inmueble a editar no existe.")
@@ -316,7 +451,22 @@ class InmuebleService:
             raise PermissionError("No tienes permisos para modificar este inmueble.")
 
         datos = cls.validar_y_estructurar_datos(form_data)
-        return InmuebleRepository.update(id_inmueble, datos)
+
+        quitar = ImagenService.ids_desde_formulario(quitar)
+        ids_portada = ImagenService.ids_desde_formulario([portada])
+        id_portada = next(iter(ids_portada), None)
+
+        existentes = ImagenService.listar(id_inmueble)
+        quedan = len([f for f in existentes if f['id_imagen'] not in quitar])
+        fotos = ImagenService.preparar(archivos, ImagenService.MAX_FOTOS - quedan)
+
+        filas = InmuebleRepository.update(id_inmueble, datos)
+        ImagenService.actualizar(id_inmueble, fotos, quitar, id_portada)
+        return filas
+
+    @classmethod
+    def obtener_imagenes(cls, id_inmueble):
+        return ImagenService.listar(id_inmueble)
 
     @classmethod
     def cambiar_disponibilidad(cls, id_inmueble, id_vendedor, nuevo_estado):

@@ -4,6 +4,8 @@ from functools import wraps
 import secrets
 from flask import session, redirect, url_for, flash, request, abort
 
+from app.repositories import UsuarioRepository
+
 
 ROL_ADMINISTRADOR = 'ADMINISTRADOR'
 ROL_VENDEDOR = 'VENDEDOR'
@@ -43,6 +45,30 @@ def current_user():
         'id_rol': session.get('id_rol'),
         'rol_nombre': session.get('rol_nombre')
     }
+
+
+def sincronizar_sesion():
+    """
+    Se ejecuta antes de cada petición. La sesión guarda el rol y el nombre, pero el
+    administrador puede cambiarlos o bloquear la cuenta mientras la persona está
+    conectada; por eso se comprueba contra la base de datos.
+    """
+    if request.endpoint in (None, 'static') or not is_authenticated():
+        return None
+
+    usuario = UsuarioRepository.find_by_id(session['user_id'])
+    if not usuario or not usuario['activo']:
+        logout_user()
+        flash('Tu cuenta no está disponible. Comunícate con el administrador.', 'danger')
+        return redirect(url_for('routes.login'))
+
+    if (usuario['rol_nombre'], usuario['nombre'], usuario['apellido']) != (
+            session.get('rol_nombre'), session.get('nombre'), session.get('apellido')):
+        session['id_rol'] = usuario['id_rol']
+        session['rol_nombre'] = usuario['rol_nombre']
+        session['nombre'] = usuario['nombre']
+        session['apellido'] = usuario['apellido']
+    return None
 
 
 def login_required(f):

@@ -1,0 +1,96 @@
+{% extends 'admin/_layout.html' %}
+
+{% block title %}Catálogos - Administración - InmoTech{% endblock %}
+{% block admin_titulo %}Catálogos{% endblock %}
+{% block admin_subtitulo %}<p>Las listas que usan los formularios: categorías de inmueble, departamentos y ciudades.</p>{% endblock %}
+
+{# Fila editable de un elemento del catálogo. Se elimina solo si no está en uso. #}
+{% macro fila(entidad, item, singular, plural, departamentos=None) %}
+    <tr>
+        <td>
+            <form method="POST" action="{{ url_for('admin.catalogo_editar', entidad=entidad, id_=item.id) }}" class="catalogo-edicion">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="{{ entidad }}-{{ item.id }}" class="sr-only">Nombre</label>
+                <input type="text" id="{{ entidad }}-{{ item.id }}" name="nombre" class="form-control" value="{{ item.nombre }}" maxlength="100" required>
+                {% if departamentos %}
+                    <label for="{{ entidad }}-{{ item.id }}-dep" class="sr-only">Departamento de {{ item.nombre }}</label>
+                    <select id="{{ entidad }}-{{ item.id }}-dep" name="id_departamento" class="form-select">
+                        {% for d in departamentos %}<option value="{{ d.id }}"{% if d.id == item.id_departamento %} selected{% endif %}>{{ d.nombre }}</option>{% endfor %}
+                    </select>
+                {% endif %}
+                <button type="submit" class="btn btn-outline btn-sm">Guardar</button>
+            </form>
+        </td>
+        <td class="celda-secundaria">{{ item.en_uso }} {{ singular if item.en_uso == 1 else plural }}</td>
+        <td>
+            <div class="acciones-fila">
+                {% if item.en_uso %}
+                    <span class="celda-secundaria">En uso</span>
+                {% else %}
+                    <form method="POST" action="{{ url_for('admin.catalogo_eliminar', entidad=entidad, id_=item.id) }}" data-confirm="¿Eliminar «{{ item.nombre }}»? Esta acción no se puede deshacer." class="form-en-linea">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit" class="btn btn-danger btn-sm" aria-label="Eliminar {{ item.nombre }}">{{ ico('papelera') }} Eliminar</button>
+                    </form>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block admin_cuerpo %}
+<div class="catalogos">
+    <section id="categoria" class="catalogo" aria-labelledby="t-categoria">
+        <h2 id="t-categoria">Categorías</h2>
+        <p class="celda-secundaria">Tipos de inmueble. Una categoría nueva se muestra con un icono genérico de ubicación.</p>
+        <form method="POST" action="{{ url_for('admin.catalogo_crear', entidad='categoria') }}" class="catalogo-alta">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label for="nueva-categoria" class="sr-only">Nombre de la categoría nueva</label>
+            <input type="text" id="nueva-categoria" name="nombre" class="form-control" placeholder="Nueva categoría" maxlength="50" required>
+            <button type="submit" class="btn btn-accent btn-sm">{{ ico('mas') }} Agregar</button>
+        </form>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead><tr><th>Nombre</th><th>Uso</th><th style="text-align: right;">Acciones</th></tr></thead>
+                <tbody>{% for c in categorias %}{{ fila('categoria', c, 'inmueble', 'inmuebles') }}{% endfor %}</tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="departamento" class="catalogo" aria-labelledby="t-departamento">
+        <h2 id="t-departamento">Departamentos</h2>
+        <form method="POST" action="{{ url_for('admin.catalogo_crear', entidad='departamento') }}" class="catalogo-alta">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label for="nuevo-departamento" class="sr-only">Nombre del departamento nuevo</label>
+            <input type="text" id="nuevo-departamento" name="nombre" class="form-control" placeholder="Nuevo departamento" maxlength="100" required>
+            <button type="submit" class="btn btn-accent btn-sm">{{ ico('mas') }} Agregar</button>
+        </form>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead><tr><th>Nombre</th><th>Uso</th><th style="text-align: right;">Acciones</th></tr></thead>
+                <tbody>{% for d in departamentos %}{{ fila('departamento', d, 'ciudad', 'ciudades') }}{% endfor %}</tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="ciudad" class="catalogo catalogo-ancho" aria-labelledby="t-ciudad">
+        <h2 id="t-ciudad">Ciudades</h2>
+        <form method="POST" action="{{ url_for('admin.catalogo_crear', entidad='ciudad') }}" class="catalogo-alta">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <label for="nueva-ciudad" class="sr-only">Nombre de la ciudad nueva</label>
+            <input type="text" id="nueva-ciudad" name="nombre" class="form-control" placeholder="Nueva ciudad" maxlength="100" required>
+            <label for="nueva-ciudad-dep" class="sr-only">Departamento de la ciudad nueva</label>
+            <select id="nueva-ciudad-dep" name="id_departamento" class="form-select" required>
+                <option value="">Departamento</option>
+                {% for d in departamentos %}<option value="{{ d.id }}">{{ d.nombre }}</option>{% endfor %}
+            </select>
+            <button type="submit" class="btn btn-accent btn-sm">{{ ico('mas') }} Agregar</button>
+        </form>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead><tr><th>Ciudad y departamento</th><th>Uso</th><th style="text-align: right;">Acciones</th></tr></thead>
+                <tbody>{% for c in ciudades %}{{ fila('ciudad', c, 'inmueble', 'inmuebles', departamentos) }}{% endfor %}</tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

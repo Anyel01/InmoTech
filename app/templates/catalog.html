@@ -12,8 +12,8 @@
     <form method="GET" action="{{ url_for('routes.catalog') }}">
         <div class="filter-grid">
             <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label">Ciudad</label>
-                <select name="ciudad" class="form-select">
+                <label class="form-label" for="f-ciudad">Ciudad</label>
+                <select name="ciudad" id="f-ciudad" class="form-select">
                     <option value="">Todas las ciudades</option>
                     {% for c in ciudades %}
                         <option value="{{ c.id_ciudad }}" {% if filtros.get('ciudad') == c.id_ciudad|string %}selected{% endif %}>
@@ -24,8 +24,8 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label">Categoría</label>
-                <select name="categoria" class="form-select">
+                <label class="form-label" for="f-categoria">Categoría</label>
+                <select name="categoria" id="f-categoria" class="form-select">
                     <option value="">Todas las categorías</option>
                     {% for cat in categorias %}
                         <option value="{{ cat.id_categoria }}" {% if filtros.get('categoria') == cat.id_categoria|string %}selected{% endif %}>
@@ -36,8 +36,8 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label">Operación</label>
-                <select name="operacion" class="form-select">
+                <label class="form-label" for="f-operacion">Operación</label>
+                <select name="operacion" id="f-operacion" class="form-select">
                     <option value="">Cualquier operación</option>
                     <option value="VENTA" {% if filtros.get('operacion') == 'VENTA' %}selected{% endif %}>Venta</option>
                     <option value="ARRIENDO" {% if filtros.get('operacion') == 'ARRIENDO' %}selected{% endif %}>Arriendo</option>
@@ -45,18 +45,18 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label">Precio Mínimo (COP)</label>
-                <input type="number" name="precio_min" class="form-control" placeholder="Ej: 50000000" value="{{ filtros.get('precio_min', '') }}" min="0" step="1000000">
+                <label class="form-label" for="f-precio_min">Precio Mínimo (COP)</label>
+                <input type="number" name="precio_min" id="f-precio_min" class="form-control" placeholder="Ej: 50000000" value="{{ filtros.get('precio_min', '') }}" min="0" step="1000000">
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label">Precio Máximo (COP)</label>
-                <input type="number" name="precio_max" class="form-control" placeholder="Ej: 500000000" value="{{ filtros.get('precio_max', '') }}" min="0" step="1000000">
+                <label class="form-label" for="f-precio_max">Precio Máximo (COP)</label>
+                <input type="number" name="precio_max" id="f-precio_max" class="form-control" placeholder="Ej: 500000000" value="{{ filtros.get('precio_max', '') }}" min="0" step="1000000">
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label">Mín. Habitaciones</label>
-                <select name="habitaciones_min" class="form-select">
+                <label class="form-label" for="f-habitaciones_min">Mín. Habitaciones</label>
+                <select name="habitaciones_min" id="f-habitaciones_min" class="form-select">
                     <option value="">Cualquiera</option>
                     <option value="1" {% if filtros.get('habitaciones_min') == '1' %}selected{% endif %}>1+</option>
                     <option value="2" {% if filtros.get('habitaciones_min') == '2' %}selected{% endif %}>2+</option>
@@ -67,59 +67,30 @@
         </div>
 
         <div style="display: flex; gap: 0.8rem; margin-top: 1.2rem; justify-content: flex-end;">
-            <a href="{{ url_for('routes.catalog') }}" class="btn btn-outline btn-sm">Limpiar Filtros</a>
-            <button type="submit" class="btn btn-accent btn-sm">{{ ico('buscar') }} Aplicar Filtros</button>
+            <a href="{{ url_for('routes.catalog') }}" class="btn btn-outline btn-sm">Quitar filtros</a>
+            <button type="submit" class="btn btn-accent btn-sm">{{ ico('buscar') }} Filtrar</button>
         </div>
     </form>
 </section>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
     <span style="font-weight: 600; color: var(--text-muted);">
-        Mostrando {{ inmuebles|length }} inmueble(s) disponible(s)
+        {{ inmuebles|length }} inmueble{{ '' if inmuebles|length == 1 else 's' }} disponible{{ '' if inmuebles|length == 1 else 's' }}
     </span>
 </div>
 
 {% if inmuebles %}
     <div class="properties-grid">
         {% for inmueble in inmuebles %}
-            <div class="property-card">
-                <div class="property-header">
-                    <span class="property-type-icon">
-                        {{ ico_categoria(inmueble.categoria) }}
-                    </span>
-                    <span class="property-badge-op">{{ inmueble.operacion }}</span>
-                    <span class="property-badge-cat">{{ inmueble.categoria }}</span>
-                </div>
-                <div class="property-body">
-                    <div class="property-price">{{ inmueble.precio | cop }}</div>
-                    <h3 class="property-title">{{ inmueble.titulo }}</h3>
-                    <p class="property-location">{{ ico('ubicacion') }} {{ inmueble.ciudad }}, {{ inmueble.departamento }}</p>
-                    <p class="property-desc-short">{{ inmueble.descripcion }}</p>
-                    <div class="property-features">
-                        <span class="feature-item">{{ ico('area') }} {{ inmueble.area }} m²</span>
-                        {% if inmueble.habitaciones > 0 %}
-                            <span class="feature-item">{{ ico('cama') }} {{ inmueble.habitaciones }} hab</span>
-                        {% endif %}
-                        {% if inmueble.banos > 0 %}
-                            <span class="feature-item">{{ ico('ducha') }} {{ inmueble.banos }} baños</span>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="property-footer">
-                    <span class="badge badge-disponible">{{ inmueble.estado }}</span>
-                    <a href="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}" class="btn btn-primary btn-sm">
-                        Ver Detalle Completo
-                    </a>
-                </div>
-            </div>
+            {% include '_tarjeta_inmueble.html' %}
         {% endfor %}
     </div>
 {% else %}
     <div class="form-card" style="text-align: center; margin-top: 2rem;">
         <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1rem;">
-            No se encontraron inmuebles con los criterios seleccionados.
+            Ningún inmueble coincide con estos filtros. Prueba con otra ciudad o amplía el rango de precio.
         </p>
-        <a href="{{ url_for('routes.catalog') }}" class="btn btn-outline btn-sm">Restablecer Búsqueda</a>
+        <a href="{{ url_for('routes.catalog') }}" class="btn btn-outline btn-sm">Quitar filtros</a>
     </div>
 {% endif %}
 {% endblock %}

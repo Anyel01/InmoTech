@@ -4,26 +4,29 @@ from flask import (
     Blueprint, render_template, request, redirect,
     url_for, flash, session, jsonify
 )
+from app import format_cop
 from app.auth import (
     login_user, logout_user, is_authenticated,
     current_user, role_required,
     generate_csrf_token, validate_csrf,
-    ROL_VENDEDOR, ROL_COMPRADOR
+    ROL_ADMINISTRADOR, ROL_VENDEDOR, ROL_COMPRADOR
 )
-from app.services import UsuarioService, InmuebleService, VisitaService
+from app.services import UsuarioService, InmuebleService, VisitaService, ImagenService
 from app.repositories import UbicacionCategoriaRepository
 
 routes_bp = Blueprint('routes', __name__)
 
 
-@routes_bp.context_processor
+@routes_bp.app_context_processor
 def inject_global_template_data():
     return {
         'current_user': current_user(),
         'is_authenticated': is_authenticated(),
         'csrf_token': generate_csrf_token(),
+        'ROL_ADMINISTRADOR': ROL_ADMINISTRADOR,
         'ROL_VENDEDOR': ROL_VENDEDOR,
-        'ROL_COMPRADOR': ROL_COMPRADOR
+        'ROL_COMPRADOR': ROL_COMPRADOR,
+        'MAX_FOTOS': ImagenService.MAX_FOTOS
     }
 
 
@@ -61,7 +64,8 @@ def catalog():
 def property_detail(id_inmueble):
     try:
         inmueble = InmuebleService.obtener_detalle(id_inmueble)
-        return render_template('property_detail.html', inmueble=inmueble)
+        imagenes = InmuebleService.obtener_imagenes(id_inmueble)
+        return render_template('property_detail.html', inmueble=inmueble, imagenes=imagenes)
     except ValueError as e:
         flash(str(e), 'danger')
         return redirect(url_for('routes.catalog'))
@@ -88,6 +92,8 @@ def login():
             if next_url and next_url.startswith('/') and not next_url.startswith('//'):
                 return redirect(next_url)
 
+            if usuario['rol_nombre'] == ROL_ADMINISTRADOR:
+                return redirect(url_for('admin.dashboard'))
             if usuario['rol_nombre'] == ROL_VENDEDOR:
                 return redirect(url_for('routes.seller_properties'))
             elif usuario['rol_nombre'] == ROL_COMPRADOR:
@@ -142,7 +148,7 @@ def create_property():
         validate_csrf()
         id_vendedor = session['user_id']
         try:
-            InmuebleService.publicar_inmueble(id_vendedor, request.form)
+            InmuebleService.publicar_inmueble(id_vendedor, request.form, request.files.getlist('fotos'))
             flash("Inmueble publicado con éxito.", 'success')
             return redirect(url_for('routes.seller_properties'))
         except (ValueError, PermissionError) as e:
@@ -155,6 +161,7 @@ def create_property():
         'property_form.html',
         modo='crear',
         inmueble=request.form.to_dict() if request.method == 'POST' else None,
+        imagenes=[],
         departamentos=departamentos,
         ciudades=ciudades,
         categorias=categorias
@@ -178,7 +185,12 @@ def edit_property(id_inmueble):
     if request.method == 'POST':
         validate_csrf()
         try:
-            InmuebleService.editar_inmueble(id_inmueble, id_vendedor, request.form)
+            InmuebleService.editar_inmueble(
+                id_inmueble, id_vendedor, request.form,
+                archivos=request.files.getlist('fotos'),
+                quitar=request.form.getlist('quitar_fotos'),
+                portada=request.form.get('portada')
+            )
             flash("Inmueble actualizado exitosamente.", 'success')
             return redirect(url_for('routes.seller_properties'))
         except (ValueError, PermissionError) as e:
@@ -191,6 +203,7 @@ def edit_property(id_inmueble):
         'property_form.html',
         modo='editar',
         inmueble=inmueble_actual,
+        imagenes=InmuebleService.obtener_imagenes(id_inmueble),
         departamentos=departamentos,
         ciudades=ciudades,
         categorias=categorias
@@ -296,6 +309,38 @@ def update_visit_status(id_visita):
 def get_ciudades_by_departamento(id_departamento):
     ciudades = UbicacionCategoriaRepository.get_ciudades(id_departamento=id_departamento)
     return jsonify(ciudades)
+
+
+@routes_bp.route('/api/inmuebles/<int:id_inmueble>')
+def get_inmueble_resumen(id_inmueble):
+    """Datos públicos de un inmueble para la vista rápida del catálogo."""
+    try:
+        inmueble = InmuebleService.obtener_detalle(id_inmueble)
+    except ValueError:
+        return jsonify({'error': 'El inmueble no existe.'}), 404
+
+    imagenes = InmuebleService.obtener_imagenes(id_inmueble)
+    return jsonify({
+        'id': inmueble['id_inmueble'],
+        'titulo': inmueble['titulo'],
+        'precio': format_cop(inmueble['precio']),
+        'operacion': inmueble['operacion'],
+        'categoria': inmueble['categoria'],
+        'estado': inmueble['estado'],
+        'ubicacion': f"{inmueble['ciudad']}, {inmueble['departamento']}",
+        'area': inmueble['area'],
+        'habitaciones': inmueble['habitaciones'],
+        'banos': inmueble['banos'],
+        'descripcion': inmueble['descripcion'],
+        'url': url_for('routes.property_detail', id_inmueble=id_inmueble),
+        'imagenes': [
+            {
+                'url': url_for('static', filename=img['ruta']),
+                'descripcion': img['descripcion'] or f"Foto {n} de {inmueble['titulo']}",
+            }
+            for n, img in enumerate(imagenes, start=1)
+        ],
+    })
 
 
 @routes_bp.route('/recuperar-password', methods=['GET', 'POST'])

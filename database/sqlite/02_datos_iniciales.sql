@@ -64,3 +64,32 @@ VALUES
     (2, '2026-11-20 15:30:00', 'Visitaré la casa con mi familia.', 'CONFIRMADA', 2, 4),
     (3, '2026-10-15 11:00:00', 'Visita realizada.', 'REALIZADA', 3, 5),
     (4, '2026-11-12 09:00:00', 'Solicitud cancelada.', 'CANCELADA', 4, 5);
+
+-- Fotos de ejemplo (archivos en app/static/img/inmuebles)
+INSERT INTO imagen_inmueble (id_imagen, ruta, descripcion, orden, id_inmueble) VALUES
+    (1, 'img/inmuebles/inmueble-1-1-fachada.svg', 'Fachada del edificio en Chapinero Alto', 1, 1),
+    (2, 'img/inmuebles/inmueble-1-2-sala.svg', 'Sala con vista a los cerros', 2, 1),
+    (3, 'img/inmuebles/inmueble-1-3-cocina.svg', 'Cocina abierta', 3, 1),
+    (4, 'img/inmuebles/inmueble-1-4-alcoba.svg', 'Alcoba principal', 4, 1),
+    (5, 'img/inmuebles/inmueble-2-1-fachada.svg', 'Fachada de la casa campestre', 1, 2),
+    (6, 'img/inmuebles/inmueble-2-2-sala.svg', 'Sala con chimenea', 2, 2),
+    (7, 'img/inmuebles/inmueble-2-3-bbq.svg', 'Zona BBQ y jardín', 3, 2),
+    (8, 'img/inmuebles/inmueble-2-4-alcoba.svg', 'Alcoba principal', 4, 2),
+    (9, 'img/inmuebles/inmueble-3-1-fachada.svg', 'Edificio en El Poblado', 1, 3),
+    (10, 'img/inmuebles/inmueble-3-2-sala.svg', 'Sala amoblada', 2, 3),
+    (11, 'img/inmuebles/inmueble-3-3-alcoba.svg', 'Alcoba amoblada', 3, 3),
+    (12, 'img/inmuebles/inmueble-4-1-fachada.svg', 'Vitrina a pie de calle', 1, 4),
+    (13, 'img/inmuebles/inmueble-4-2-interior.svg', 'Interior con mezzanine', 2, 4),
+    (14, 'img/inmuebles/inmueble-5-1-panoramica.svg', 'Vista general del lote', 1, 5),
+    (15, 'img/inmuebles/inmueble-5-2-plano.svg', 'Plano y medidas del lote', 2, 5),
+    (16, 'img/inmuebles/inmueble-5-3-entorno.svg', 'Entorno y vía de acceso', 3, 5),
+    (17, 'img/inmuebles/inmueble-6-1-fachada.svg', 'Fachada de la casa', 1, 6),
+    (18, 'img/inmuebles/inmueble-6-2-piscina.svg', 'Piscina y patio', 2, 6),
+    (19, 'img/inmuebles/inmueble-6-3-sala.svg', 'Sala', 3, 6),
+    (20, 'img/inmuebles/inmueble-7-1-fachada.svg', 'Edificio en Cabecera del Llano', 1, 7),
+    (21, 'img/inmuebles/inmueble-7-2-terraza.svg', 'Terraza con zona BBQ', 2, 7),
+    (22, 'img/inmuebles/inmueble-7-3-sala.svg', 'Sala del dúplex', 3, 7),
+    (23, 'img/inmuebles/inmueble-7-4-alcoba.svg', 'Alcoba principal', 4, 7),
+    (24, 'img/inmuebles/inmueble-8-1-fachada.svg', 'Edificio frente a la bahía', 1, 8),
+    (25, 'img/inmuebles/inmueble-8-2-sala.svg', 'Sala con vista al mar', 2, 8),
+    (26, 'img/inmuebles/inmueble-8-3-balcon.svg', 'Balcón frente a la bahía', 3, 8);

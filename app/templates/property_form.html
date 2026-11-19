@@ -6,20 +6,21 @@
 
 {% block content %}
 <div style="margin-bottom: 1.5rem;">
-    <a href="{{ url_for('routes.seller_properties') }}" class="btn btn-outline btn-sm">&larr; Volver a Mis Inmuebles</a>
+    <a href="{{ volver_url or url_for('routes.seller_properties') }}" class="btn btn-outline btn-sm">&larr; {{ volver_texto or 'Volver a Mis Inmuebles' }}</a>
 </div>
 
-<div class="form-card" style="max-width: 800px;">
+<div class="publicar-layout">
+<div class="form-card" style="max-width: 800px; width: 100%;">
     <div style="margin-bottom: 2rem;">
         <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">
-            {% if modo == 'editar' %}{{ ico('editar') }} Modificar Datos del Inmueble{% else %}{{ ico('apartamento') }} Publicar Nuevo Inmueble{% endif %}
+            {% if titulo_admin %}{{ ico('editar') }} {{ titulo_admin }}{% elif modo == 'editar' %}{{ ico('editar') }} Modificar Datos del Inmueble{% else %}{{ ico('apartamento') }} Publicar Nuevo Inmueble{% endif %}
         </h1>
         <p style="color: var(--text-muted); font-size: 0.95rem;">
             Diligencia la información detallada para publicar tu propiedad en el catálogo
         </p>
     </div>
 
-    <form method="POST" action="{% if modo == 'editar' %}{{ url_for('routes.edit_property', id_inmueble=inmueble.id_inmueble) }}{% else %}{{ url_for('routes.create_property') }}{% endif %}">
+    <form method="POST" enctype="multipart/form-data" data-formulario-inmueble action="{% if accion_url %}{{ accion_url }}{% elif modo == 'editar' %}{{ url_for('routes.edit_property', id_inmueble=inmueble.id_inmueble) }}{% else %}{{ url_for('routes.create_property') }}{% endif %}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <div class="form-group">
@@ -57,7 +58,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="precio" class="form-label">Precio en Pesos Colombianos (COP) *</label>
-                <input type="number" id="precio" name="precio" class="form-control" placeholder="Ej: 350000000" min="1" step="1000" value="{{ inmueble.precio if inmueble else '' }}" required>
+                <input type="number" id="precio" name="precio" class="form-control" placeholder="Ej: 350000000" min="1000" step="1000" value="{{ inmueble.precio if inmueble else '' }}" required>
             </div>
 
             <div class="form-group">
@@ -109,12 +110,78 @@
             <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej: Carrera 7 # 71-21 Torre A Apto 502" value="{{ inmueble.direccion if inmueble else '' }}" maxlength="200" required>
         </div>
 
+        <fieldset class="fotos-campo" data-fotos data-max="{{ MAX_FOTOS }}" style="border: 0; padding: 0; margin-inline: 0;">
+            <legend class="form-label">Fotos del inmueble</legend>
+
+            {% if imagenes %}
+                <p style="margin: 0 0 .6rem; color: var(--text-muted); font-size: .9rem;">
+                    Elige cuál foto será la portada o marca las que quieras quitar. Los cambios se guardan al pulsar «Guardar cambios».
+                </p>
+                <ul class="fotos-lista" data-fotos-existentes aria-label="Fotos actuales">
+                    {% for img in imagenes %}
+                        {% set texto = img.descripcion or ('Foto ' ~ loop.index ~ ' de ' ~ inmueble.titulo) %}
+                        <li class="foto-item" data-foto-existente data-url="{{ url_for('static', filename=img.ruta) }}" data-descripcion="{{ texto }}">
+                            <span class="foto-marca" data-marca hidden>Portada</span>
+                            <img src="{{ url_for('static', filename=img.ruta) }}" alt="{{ texto }}" width="1600" height="1000" loading="lazy">
+                            <div class="foto-pie">
+                                <div class="foto-acciones">
+                                    <label><input type="radio" name="portada" value="{{ img.id_imagen }}"{% if loop.first %} checked{% endif %}> Portada</label>
+                                    <label class="peligro"><input type="checkbox" name="quitar_fotos" value="{{ img.id_imagen }}"> Quitar</label>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="fotos-zona" data-zona-fotos style="margin-top: {{ '1rem' if imagenes else '0' }};">
+                <input type="file" id="fotos" name="fotos" accept="image/jpeg,image/png,image/webp" multiple>
+                <label for="fotos" class="btn btn-outline">{{ ico('subir') }} {% if imagenes %}Agregar más fotos{% else %}Elegir fotos{% endif %}</label>
+                <p>o arrástralas hasta aquí. JPG, PNG o WebP, hasta 4 MB cada una. Máximo {{ MAX_FOTOS }} fotos por inmueble.</p>
+                {% if imagenes %}
+                    <p>Las fotos nuevas se agregan al final; después podrás elegir cuál es la portada.</p>
+                {% else %}
+                    <p>La primera foto será la portada.</p>
+                {% endif %}
+            </div>
+            <p class="fotos-error" role="alert" data-fotos-error hidden></p>
+            <ul class="fotos-lista" data-fotos-nuevas aria-label="Fotos nuevas por subir"></ul>
+        </fieldset>
+
         <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-            <a href="{{ url_for('routes.seller_properties') }}" class="btn btn-outline">Cancelar</a>
+            <a href="{{ volver_url or url_for('routes.seller_properties') }}" class="btn btn-outline">Cancelar</a>
             <button type="submit" class="btn btn-primary" style="padding: 0.7rem 1.8rem;">
                 {% if modo == 'editar' %}Guardar Cambios{% else %}Publicar Inmueble{% endif %}
             </button>
         </div>
     </form>
 </div>
+
+<aside class="vista-previa" aria-labelledby="vp-titulo">
+    <h2 id="vp-titulo">Así se verá tu publicación</h2>
+    <p>La tarjeta se actualiza mientras completas el formulario.</p>
+    <article class="property-card" data-vp>
+        <div class="property-header" data-vp-cabecera>
+            <img class="property-foto" data-vp-foto alt="" hidden>
+            <span class="property-type-icon"><span class="ico ico-apartamento" data-vp-icono aria-hidden="true"></span></span>
+            <span class="property-badge-op" data-vp-operacion>VENTA</span>
+            <span class="property-badge-cat" data-vp-categoria>Categoría</span>
+        </div>
+        <div class="property-body">
+            <div class="property-price" data-vp-precio>$ 0 COP</div>
+            <h3 class="property-title" data-vp-titulo>Título de tu inmueble</h3>
+            <p class="property-location">{{ ico('ubicacion') }} <span data-vp-ubicacion>Ciudad, departamento</span></p>
+            <div class="property-features">
+                <span class="feature-item">{{ ico('area') }} <span data-vp-area>0</span> m²</span>
+                <span class="feature-item">{{ ico('cama') }} <span data-vp-habitaciones>0</span> hab</span>
+                <span class="feature-item">{{ ico('ducha') }} <span data-vp-banos>0</span> baños</span>
+            </div>
+        </div>
+    </article>
+</aside>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/subida-fotos.js') }}"></script>
 {% endblock %}

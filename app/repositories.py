@@ -2,6 +2,16 @@
 
 from app.db import get_db_cursor
 
+# Columnas que agregan la foto de portada (la de menor orden) y cuántas fotos
+# tiene cada inmueble. Se concatenan a los SELECT de los listados.
+COLUMNAS_FOTOS = """
+                (SELECT im.ruta FROM `imagen_inmueble` im
+                 WHERE im.id_inmueble = i.id_inmueble
+                 ORDER BY im.orden ASC, im.id_imagen ASC LIMIT 1) AS portada,
+                (SELECT COUNT(*) FROM `imagen_inmueble` im2
+                 WHERE im2.id_inmueble = i.id_inmueble) AS total_imagenes
+"""
+
 
 class UsuarioRepository:
 
@@ -18,6 +28,7 @@ class UsuarioRepository:
                 u.password_hash,
                 u.telefono,
                 u.id_rol,
+                u.activo,
                 r.nombre AS rol_nombre
             FROM `usuario` u
             INNER JOIN `rol` r ON u.id_rol = r.id_rol
@@ -41,6 +52,7 @@ class UsuarioRepository:
                 u.correo,
                 u.telefono,
                 u.id_rol,
+                u.activo,
                 r.nombre AS rol_nombre
             FROM `usuario` u
             INNER JOIN `rol` r ON u.id_rol = r.id_rol
@@ -132,7 +144,8 @@ class InmuebleRepository:
                 d.id_departamento,
                 d.nombre AS departamento,
                 CONCAT(u.nombre, ' ', u.apellido) AS vendedor_nombre,
-                u.telefono AS vendedor_telefono
+                u.telefono AS vendedor_telefono,
+                """ + COLUMNAS_FOTOS + """
             FROM `inmueble` i
             INNER JOIN `categoria` c ON i.id_categoria = c.id_categoria
             INNER JOIN `ciudad` ci ON i.id_ciudad = ci.id_ciudad
@@ -191,7 +204,8 @@ class InmuebleRepository:
                 i.estado,
                 c.nombre AS categoria,
                 ci.nombre AS ciudad,
-                d.nombre AS departamento
+                d.nombre AS departamento,
+                """ + COLUMNAS_FOTOS + """
             FROM `inmueble` i
             INNER JOIN `categoria` c ON i.id_categoria = c.id_categoria
             INNER JOIN `ciudad` ci ON i.id_ciudad = ci.id_ciudad
@@ -263,7 +277,8 @@ class InmuebleRepository:
                 c.nombre AS categoria,
                 ci.nombre AS ciudad,
                 d.nombre AS departamento,
-                COUNT(v.id_visita) AS total_visitas
+                COUNT(v.id_visita) AS total_visitas,
+                """ + COLUMNAS_FOTOS + """
             FROM `inmueble` i
             INNER JOIN `categoria` c ON i.id_categoria = c.id_categoria
             INNER JOIN `ciudad` ci ON i.id_ciudad = ci.id_ciudad
@@ -482,3 +497,52 @@ class UbicacionCategoriaRepository:
         with get_db_cursor() as cursor:
             cursor.execute(sql)
             return cursor.fetchall()
+
+
+class ImagenRepository:
+    """
+    Repositorio para las fotos de los inmuebles (tabla `imagen_inmueble`).
+    """
+
+    @staticmethod
+    def find_by_inmueble(id_inmueble):
+        sql = """
+            SELECT id_imagen, ruta, descripcion, orden, id_inmueble
+            FROM `imagen_inmueble`
+            WHERE id_inmueble = %s
+            ORDER BY orden ASC, id_imagen ASC;
+        """
+        with get_db_cursor() as cursor:
+            cursor.execute(sql, (id_inmueble,))
+            return cursor.fetchall()
+
+    @staticmethod
+    def create_many(id_inmueble, fotos):
+        """Guarda varias fotos en una sola transacción. fotos = [(ruta, descripcion, orden), ...]"""
+        sql = """
+            INSERT INTO `imagen_inmueble` (ruta, descripcion, orden, id_inmueble)
+            VALUES (%s, %s, %s, %s);
+        """
+        with get_db_cursor(commit=True) as cursor:
+            for ruta, descripcion, orden in fotos:
+                cursor.execute(sql, (ruta, descripcion, orden, id_inmueble))
+
+    @staticmethod
+    def delete_many(id_inmueble, ids_imagenes):
+        """Borra las fotos indicadas, solo si pertenecen a ese inmueble."""
+        if not ids_imagenes:
+            return 0
+        marcas = ', '.join(['%s'] * len(ids_imagenes))
+        sql = f"DELETE FROM `imagen_inmueble` WHERE id_inmueble = %s AND id_imagen IN ({marcas});"
+        with get_db_cursor(commit=True) as cursor:
+            cursor.execute(sql, (id_inmueble, *ids_imagenes))
+            return cursor.rowcount
+
+    @staticmethod
+    def reordenar(id_inmueble, ids_en_orden):
+        """Numera las fotos 1, 2, 3... según la lista; la primera queda de portada."""
+        sql = "UPDATE `imagen_inmueble` SET orden = %s WHERE id_imagen = %s AND id_inmueble = %s;"
+        with get_db_cursor(commit=True) as cursor:
+            for posicion, id_imagen in enumerate(ids_en_orden, start=1):
+                cursor.execute(sql, (posicion, id_imagen, id_inmueble))
+

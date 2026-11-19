@@ -1,0 +1,117 @@
+{% extends 'admin/_layout.html' %}
+
+{% block title %}{{ 'Editar usuario' if modo == 'editar' else 'Nuevo usuario' }} - Administración - InmoTech{% endblock %}
+{% block admin_titulo %}{{ 'Editar usuario' if modo == 'editar' else 'Nuevo usuario' }}{% endblock %}
+{% block admin_subtitulo %}
+    <p>{% if modo == 'editar' %}{{ usuario.correo }}{% else %}Crea una cuenta con el rol que necesites.{% endif %}</p>
+{% endblock %}
+{% block admin_acciones %}
+    <a href="{{ url_for('admin.usuarios') }}" class="btn btn-outline btn-sm">&larr; Volver a Usuarios</a>
+{% endblock %}
+
+{% block admin_cuerpo %}
+{% set rol_actual = (usuario.rol_nombre or usuario.rol) if usuario else 'COMPRADOR' %}
+{% set es_yo = modo == 'editar' and usuario.id_usuario == current_user.id_usuario %}
+
+<div class="admin-dos-columnas">
+    <div class="form-card">
+        <form method="POST" action="{{ url_for('admin.usuario_nuevo') if modo == 'crear' else url_for('admin.usuario_editar', id_usuario=usuario.id_usuario) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombre" class="form-label">Nombre *</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" value="{{ usuario.nombre if usuario else '' }}" maxlength="100" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="apellido" class="form-label">Apellido *</label>
+                    <input type="text" id="apellido" name="apellido" class="form-control" value="{{ usuario.apellido if usuario else '' }}" maxlength="100" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="correo" class="form-label">Correo electrónico *</label>
+                    <input type="email" id="correo" name="correo" class="form-control" value="{{ usuario.correo if usuario else '' }}" maxlength="150" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono" class="form-label">Teléfono *</label>
+                    <input type="tel" id="telefono" name="telefono" class="form-control" value="{{ usuario.telefono if usuario else '' }}" maxlength="20" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="rol" class="form-label">Rol *</label>
+                <select id="rol" name="rol" class="form-select" required{% if es_yo %} aria-describedby="ayuda-rol"{% endif %}>
+                    {% for r in roles %}<option value="{{ r }}"{% if rol_actual == r %} selected{% endif %}>{{ r|capitalize }}</option>{% endfor %}
+                </select>
+                {% if es_yo %}<small id="ayuda-rol" class="ayuda">No puedes cambiar tu propio rol; pídeselo a otro administrador.</small>{% endif %}
+            </div>
+
+            {% if modo == 'crear' %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password" class="form-label">Contraseña *</label>
+                        <input type="password" id="password" name="password" class="form-control" minlength="6" autocomplete="new-password" required>
+                        <small class="ayuda">Mínimo 6 caracteres.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="form-label">Repite la contraseña *</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="6" autocomplete="new-password" required>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="admin-form-botones">
+                <a href="{{ url_for('admin.usuarios') }}" class="btn btn-outline">Cancelar</a>
+                <button type="submit" class="btn btn-primary">{{ 'Guardar cambios' if modo == 'editar' else 'Crear usuario' }}</button>
+            </div>
+        </form>
+    </div>
+
+    {% if modo == 'editar' %}
+        <div class="admin-lateral">
+            <section class="form-card">
+                <h2 class="admin-subtitulo">Cuenta</h2>
+                <p>
+                    {% if usuario.activo %}<span class="badge badge-activa">Activa</span>{% else %}<span class="badge badge-bloqueada">Bloqueada</span>{% endif %}
+                    <span class="celda-secundaria">
+                        · {{ usuario.total_inmuebles }} inmueble{{ '' if usuario.total_inmuebles == 1 else 's' }}
+                        · {{ usuario.total_visitas }} visita{{ '' if usuario.total_visitas == 1 else 's' }}
+                    </span>
+                </p>
+                {% if not es_yo %}
+                    <form method="POST" action="{{ url_for('admin.usuario_estado', id_usuario=usuario.id_usuario) }}"
+                          {% if usuario.activo %}data-confirm="¿Bloquear la cuenta de {{ usuario.nombre }}? No podrá iniciar sesión hasta que la reactives."{% endif %}>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="volver" value="{{ url_for('admin.usuario_editar', id_usuario=usuario.id_usuario) }}">
+                        <input type="hidden" name="activo" value="{{ 0 if usuario.activo else 1 }}">
+                        <button type="submit" class="btn {{ 'btn-outline' if usuario.activo else 'btn-success' }} btn-sm">
+                            {% if usuario.activo %}{{ ico('candado') }} Bloquear cuenta{% else %}{{ ico('check') }} Reactivar cuenta{% endif %}
+                        </button>
+                    </form>
+                {% else %}
+                    <p class="celda-secundaria">Es tu cuenta: no puedes bloquearla ni eliminarla.</p>
+                {% endif %}
+            </section>
+
+            <section class="form-card">
+                <h2 class="admin-subtitulo">Restablecer contraseña</h2>
+                <p class="celda-secundaria">Escribe una contraseña nueva y entrégasela a la persona. Reemplaza la anterior de inmediato.</p>
+                <form method="POST" action="{{ url_for('admin.usuario_password', id_usuario=usuario.id_usuario) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <div class="form-group">
+                        <label for="nueva-password" class="form-label">Contraseña nueva</label>
+                        <input type="password" id="nueva-password" name="password" class="form-control" minlength="6" autocomplete="new-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nueva-confirmacion" class="form-label">Repite la contraseña</label>
+                        <input type="password" id="nueva-confirmacion" name="confirm_password" class="form-control" minlength="6" autocomplete="new-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Guardar contraseña</button>
+                </form>
+            </section>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{# Piezas que se repiten en varias páginas del panel. Se importan con:
+   {% from 'admin/_macros.html' import paginador, boton_accion with context %} #}
+
+{# Paginador que conserva los filtros de la URL. Recibe el diccionario de paginar() #}
+{% macro paginador(pagina) %}
+    {% if pagina.total %}
+        <nav class="paginador" aria-label="Paginación">
+            <p>Mostrando {{ pagina.desde }}–{{ pagina.hasta }} de {{ pagina.total }}</p>
+            {% if pagina.paginas > 1 %}
+                {% set ns = namespace(anterior=0) %}
+                <ul>
+                    {% if pagina.pagina > 1 %}
+                        <li><a href="{{ url_for(request.endpoint, **dict(request.args.to_dict(), pagina=pagina.pagina - 1)) }}">Anterior</a></li>
+                    {% endif %}
+                    {% for n in range(1, pagina.paginas + 1) %}
+                        {% if n == 1 or n == pagina.paginas or (n - pagina.pagina)|abs <= 1 %}
+                            {% if ns.anterior and n - ns.anterior > 1 %}<li class="paginador-puntos" aria-hidden="true">…</li>{% endif %}
+                            <li>
+                                {% if n == pagina.pagina %}
+                                    <span aria-current="page">{{ n }}</span>
+                                {% else %}
+                                    <a href="{{ url_for(request.endpoint, **dict(request.args.to_dict(), pagina=n)) }}" aria-label="Ir a la página {{ n }}">{{ n }}</a>
+                                {% endif %}
+                            </li>
+                            {% set ns.anterior = n %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if pagina.pagina < pagina.paginas %}
+                        <li><a href="{{ url_for(request.endpoint, **dict(request.args.to_dict(), pagina=pagina.pagina + 1)) }}">Siguiente</a></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </nav>
+    {% endif %}
+{% endmacro %}
+
+{# Formulario de un solo botón que cambia algo (estado, bloqueo...). Vuelve a la misma lista con sus filtros #}
+{% macro boton_accion(url, texto, clase='btn-outline', confirmar=None, campos=None, nombre_icono=None) %}
+    <form method="POST" action="{{ url }}"{% if confirmar %} data-confirm="{{ confirmar }}"{% endif %} class="form-en-linea">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="volver" value="{{ request.full_path.rstrip('?') }}">
+        {% if campos %}{% for nombre, valor in campos.items() %}<input type="hidden" name="{{ nombre }}" value="{{ valor }}">{% endfor %}{% endif %}
+        <button type="submit" class="btn {{ clase }} btn-sm">{% if nombre_icono %}{{ ico(nombre_icono) }} {% endif %}{{ texto }}</button>
+    </form>
+{% endmacro %}

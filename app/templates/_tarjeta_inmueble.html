@@ -1,0 +1,44 @@
+{# Tarjeta de un inmueble para el inicio y el catálogo. Usa la variable "inmueble". #}
+<article class="property-card">
+    <div class="property-header{% if inmueble.portada %} property-header--foto{% endif %}">
+        {% if inmueble.portada %}
+            <img class="property-foto" src="{{ url_for('static', filename=inmueble.portada) }}" alt="" width="1600" height="1000" loading="lazy">
+        {% else %}
+            <span class="property-type-icon">
+                {{ ico_categoria(inmueble.categoria) }}
+            </span>
+        {% endif %}
+        <span class="property-badge-op">{{ inmueble.operacion }}</span>
+        <span class="property-badge-cat">{{ inmueble.categoria }}</span>
+        <button type="button" class="btn-vista-rapida"
+                data-vista-rapida="{{ inmueble.id_inmueble }}"
+                data-url-detalle="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}"
+                aria-label="Vista rápida de {{ inmueble.titulo }}">
+            {{ ico('ojo') }} Vista rápida
+        </button>
+        {% if inmueble.total_imagenes and inmueble.total_imagenes > 1 %}
+            <span class="property-fotos-total">{{ ico('foto') }} {{ inmueble.total_imagenes }}<span class="sr-only"> fotos</span></span>
+        {% endif %}
+    </div>
+    <div class="property-body">
+        <div class="property-price">{{ inmueble.precio | cop }}</div>
+        <h3 class="property-title">{{ inmueble.titulo }}</h3>
+        <p class="property-location">{{ ico('ubicacion') }} {{ inmueble.ciudad }}, {{ inmueble.departamento }}</p>
+        <p class="property-desc-short">{{ inmueble.descripcion }}</p>
+        <div class="property-features">
+            <span class="feature-item">{{ ico('area') }} {{ inmueble.area }} m²</span>
+            {% if inmueble.habitaciones > 0 %}
+                <span class="feature-item">{{ ico('cama') }} {{ inmueble.habitaciones }} hab</span>
+            {% endif %}
+            {% if inmueble.banos > 0 %}
+                <span class="feature-item">{{ ico('ducha') }} {{ inmueble.banos }} baños</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="property-footer">
+        <span class="badge badge-disponible">{{ inmueble.estado }}</span>
+        <a href="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}" class="btn btn-primary btn-sm">
+            Ver detalle
+        </a>
+    </div>
+</article>

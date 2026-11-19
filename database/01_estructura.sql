@@ -7,6 +7,7 @@ USE `inmotech_db`;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `imagen_inmueble`;
 DROP TABLE IF EXISTS `visita`;
 DROP TABLE IF EXISTS `inmueble`;
 DROP TABLE IF EXISTS `categoria`;
@@ -32,6 +33,8 @@ CREATE TABLE `usuario` (
     `password_hash` VARCHAR(255) NOT NULL,
     `telefono` VARCHAR(20) NOT NULL,
     `id_rol` INT NOT NULL,
+    `activo` TINYINT(1) NOT NULL DEFAULT 1,
+    CONSTRAINT `chk_usuario_activo` CHECK (`activo` IN (0, 1)),
     CONSTRAINT `fk_usuario_rol`
         FOREIGN KEY (`id_rol`) REFERENCES `rol`(`id_rol`)
         ON UPDATE CASCADE
@@ -127,3 +130,24 @@ CREATE INDEX `idx_visita_inmueble` ON `visita`(`id_inmueble`);
 CREATE INDEX `idx_visita_comprador` ON `visita`(`id_comprador`);
 CREATE INDEX `idx_visita_estado` ON `visita`(`estado`);
 CREATE INDEX `idx_visita_fecha` ON `visita`(`fecha_visita`);
+
+-- ------------------------------------------------------------------------------
+-- 8. Tabla: imagen_inmueble
+-- Fotos de cada inmueble. "ruta" es relativa a la carpeta static/ y "orden"
+-- define la secuencia del carrusel (la primera, orden 1, es la portada).
+-- Si se borra un inmueble sus fotos se borran con él (CASCADE).
+-- ------------------------------------------------------------------------------
+CREATE TABLE `imagen_inmueble` (
+    `id_imagen` INT AUTO_INCREMENT PRIMARY KEY,
+    `ruta` VARCHAR(255) NOT NULL,
+    `descripcion` VARCHAR(200) NOT NULL DEFAULT '',
+    `orden` INT NOT NULL DEFAULT 1,
+    `id_inmueble` INT NOT NULL,
+    CONSTRAINT `chk_imagen_orden` CHECK (`orden` >= 1),
+    CONSTRAINT `fk_imagen_inmueble`
+        FOREIGN KEY (`id_inmueble`) REFERENCES `inmueble`(`id_inmueble`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX `idx_imagen_inmueble_orden` ON `imagen_inmueble`(`id_inmueble`, `orden`);

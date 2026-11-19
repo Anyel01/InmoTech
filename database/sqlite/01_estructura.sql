@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS usuario (
     correo TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     telefono TEXT NOT NULL,
-    id_rol INTEGER NOT NULL REFERENCES rol(id_rol)
+    id_rol INTEGER NOT NULL REFERENCES rol(id_rol),
+    activo INTEGER NOT NULL DEFAULT 1 CHECK (activo IN (0, 1))
 );
 CREATE TABLE IF NOT EXISTS departamento (
     id_departamento INTEGER PRIMARY KEY,
@@ -52,6 +53,14 @@ CREATE TABLE IF NOT EXISTS visita (
     id_comprador INTEGER NOT NULL REFERENCES usuario(id_usuario)
 );
 
+CREATE TABLE IF NOT EXISTS imagen_inmueble (
+    id_imagen INTEGER PRIMARY KEY,
+    ruta TEXT NOT NULL,
+    descripcion TEXT NOT NULL DEFAULT '',
+    orden INTEGER NOT NULL DEFAULT 1 CHECK (orden >= 1),
+    id_inmueble INTEGER NOT NULL REFERENCES inmueble(id_inmueble) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 -- Indices (mismos que en la version MySQL)
 CREATE INDEX IF NOT EXISTS idx_usuario_rol        ON usuario(id_rol);
 CREATE INDEX IF NOT EXISTS idx_ciudad_departamento ON ciudad(id_departamento);
@@ -65,3 +74,4 @@ CREATE INDEX IF NOT EXISTS idx_visita_inmueble    ON visita(id_inmueble);
 CREATE INDEX IF NOT EXISTS idx_visita_comprador   ON visita(id_comprador);
 CREATE INDEX IF NOT EXISTS idx_visita_estado      ON visita(estado);
 CREATE INDEX IF NOT EXISTS idx_visita_fecha       ON visita(fecha_visita);
+CREATE INDEX IF NOT EXISTS idx_imagen_inmueble_orden ON imagen_inmueble(id_inmueble, orden);

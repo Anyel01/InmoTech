@@ -1,56 +1,75 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="Segoe UI, Arial, sans-serif">
-  <rect width="900" height="520" fill="#f3f0e8"/>
-  <text x="450" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Qué puede hacer cada rol</text>
-
-  <!-- encabezado -->
-  <rect x="30" y="56" width="840" height="44" rx="10" fill="#183c3a"/>
-  <text x="50" y="84" font-size="14" font-weight="700" fill="#fffdf8">Acción</text>
-  <text x="520" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Visitante</text>
-  <text x="640" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Comprador</text>
-  <text x="760" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8">Vendedor</text>
-  <text x="846" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#fffdf8"></text>
-
-  <g font-size="13.5" fill="#202b29">
-    <rect x="30" y="100" width="840" height="36" fill="#fffdf8"/>
-    <text x="50" y="123">Ver inicio, catálogo y detalle de inmuebles</text>
-    <rect x="30" y="136" width="840" height="36" fill="#f3f0e8"/>
-    <text x="50" y="159">Registrarse (siempre queda como COMPRADOR)</text>
-    <rect x="30" y="172" width="840" height="36" fill="#fffdf8"/>
-    <text x="50" y="195">Solicitar una visita a un inmueble disponible</text>
-    <rect x="30" y="208" width="840" height="36" fill="#f3f0e8"/>
-    <text x="50" y="231">Ver y cancelar mis solicitudes pendientes</text>
-    <rect x="30" y="244" width="840" height="36" fill="#fffdf8"/>
-    <text x="50" y="267">Publicar un inmueble</text>
-    <rect x="30" y="280" width="840" height="36" fill="#f3f0e8"/>
-    <text x="50" y="303">Editar o pausar mis propios inmuebles</text>
-    <rect x="30" y="316" width="840" height="36" fill="#fffdf8"/>
-    <text x="50" y="339">Ver las visitas que recibieron mis inmuebles</text>
-    <rect x="30" y="352" width="840" height="36" fill="#f3f0e8"/>
-    <text x="50" y="375">Confirmar, rechazar o marcar como realizada una visita</text>
-  </g>
-
-  <!-- marcas: si = circulo verde, no = guion gris -->
-  <g stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-width="3">
-    <!-- fila 1 -->
-    <path d="M512 118l5 5 10-11" stroke="#32735b"/><path d="M632 118l5 5 10-11" stroke="#32735b"/><path d="M752 118l5 5 10-11" stroke="#32735b"/>
-    <!-- fila 2 -->
-    <path d="M512 154l5 5 10-11" stroke="#32735b"/><path d="M634 154h12" stroke="#bdb9ab"/><path d="M754 154h12" stroke="#bdb9ab"/>
-    <!-- fila 3 -->
-    <path d="M514 190h12" stroke="#bdb9ab"/><path d="M632 190l5 5 10-11" stroke="#32735b"/><path d="M754 190h12" stroke="#bdb9ab"/>
-    <!-- fila 4 -->
-    <path d="M514 226h12" stroke="#bdb9ab"/><path d="M632 226l5 5 10-11" stroke="#32735b"/><path d="M754 226h12" stroke="#bdb9ab"/>
-    <!-- fila 5 -->
-    <path d="M514 262h12" stroke="#bdb9ab"/><path d="M634 262h12" stroke="#bdb9ab"/><path d="M752 262l5 5 10-11" stroke="#32735b"/>
-    <!-- fila 6 -->
-    <path d="M514 298h12" stroke="#bdb9ab"/><path d="M634 298h12" stroke="#bdb9ab"/><path d="M752 298l5 5 10-11" stroke="#32735b"/>
-    <!-- fila 7 -->
-    <path d="M514 334h12" stroke="#bdb9ab"/><path d="M634 334h12" stroke="#bdb9ab"/><path d="M752 334l5 5 10-11" stroke="#32735b"/>
-    <!-- fila 8 -->
-    <path d="M514 370h12" stroke="#bdb9ab"/><path d="M634 370h12" stroke="#bdb9ab"/><path d="M752 370l5 5 10-11" stroke="#32735b"/>
-  </g>
-
-  <rect x="30" y="410" width="840" height="84" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
-  <text x="50" y="436" font-size="13.5" font-weight="700" fill="#183c3a">Cómo se aplica en el código</text>
-  <text x="50" y="458" font-size="12.5" fill="#202b29">El decorador @role_required('VENDEDOR') o @role_required('COMPRADOR') de auth.py protege cada ruta.</text>
-  <text x="50" y="476" font-size="12.5" fill="#202b29">Además, los servicios comprueban que el inmueble o la visita pertenezcan al usuario de la sesión.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 610" font-family="Segoe UI, Arial, sans-serif">
+<rect width="900" height="610" fill="#f3f0e8"/>
+<text x="450" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Qué puede hacer cada rol</text>
+<rect x="30" y="56" width="840" height="44" rx="10" fill="#183c3a"/>
+<text x="50" y="84" font-size="14" font-weight="700" fill="#fffdf8">Acción</text>
+<text x="485" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#fffdf8">Visitante</text>
+<text x="585" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#fffdf8">Comprador</text>
+<text x="685" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#fffdf8">Vendedor</text>
+<text x="795" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#fffdf8">Administrador</text>
+<rect x="30" y="100" width="840" height="38" fill="#fffdf8"/>
+<text x="50" y="124" font-size="13" fill="#202b29">Ver inicio, catálogo y detalle de inmuebles</text>
+<path d="M477 119l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M577 119l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M677 119l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M787 119l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="30" y="138" width="840" height="38" fill="#f3f0e8"/>
+<text x="50" y="162" font-size="13" fill="#202b29">Registrarse (siempre queda como COMPRADOR)</text>
+<path d="M477 157l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M579 157h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M679 157h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M789 157h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<rect x="30" y="176" width="840" height="38" fill="#fffdf8"/>
+<text x="50" y="200" font-size="13" fill="#202b29">Solicitar una visita; ver y cancelar mis solicitudes</text>
+<path d="M479 195h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M577 195l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M679 195h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M789 195h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<rect x="30" y="214" width="840" height="38" fill="#f3f0e8"/>
+<text x="50" y="238" font-size="13" fill="#202b29">Publicar un inmueble y editar o pausar los míos</text>
+<path d="M479 233h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 233h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M677 233l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M789 233h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<rect x="30" y="252" width="840" height="38" fill="#fffdf8"/>
+<text x="50" y="276" font-size="13" fill="#202b29">Confirmar, rechazar o marcar realizadas las visitas que recibo</text>
+<path d="M479 271h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 271h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M677 271l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M789 271h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<rect x="30" y="290" width="840" height="38" fill="#f3f0e8"/>
+<text x="50" y="314" font-size="13" fill="#202b29">Ver el resumen con estadísticas y exportar a CSV</text>
+<path d="M479 309h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 309h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M679 309h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M787 309l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="30" y="328" width="840" height="38" fill="#fffdf8"/>
+<text x="50" y="352" font-size="13" fill="#202b29">Crear, editar, bloquear o eliminar usuarios</text>
+<path d="M479 347h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 347h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M679 347h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M787 347l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="30" y="366" width="840" height="38" fill="#f3f0e8"/>
+<text x="50" y="390" font-size="13" fill="#202b29">Editar, pausar o eliminar cualquier inmueble</text>
+<path d="M479 385h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 385h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M679 385h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M787 385l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="30" y="404" width="840" height="38" fill="#fffdf8"/>
+<text x="50" y="428" font-size="13" fill="#202b29">Cambiar el estado de cualquier visita</text>
+<path d="M479 423h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 423h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M679 423h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M787 423l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="30" y="442" width="840" height="38" fill="#f3f0e8"/>
+<text x="50" y="466" font-size="13" fill="#202b29">Gestionar categorías, departamentos y ciudades</text>
+<path d="M479 461h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M579 461h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M679 461h12" fill="none" stroke="#bdb9ab" stroke-width="3" stroke-linecap="round"/>
+<path d="M787 461l5 5 10-11" fill="none" stroke="#32735b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="30" y="500" width="840" height="96" rx="10" fill="#fffdf8" stroke="#dedbd0" stroke-width="2"/>
+<text x="50" y="526" font-size="13.5" font-weight="700" fill="#183c3a">Cómo se aplica en el código</text>
+<text x="50" y="548" font-size="12.5" fill="#202b29">@role_required('VENDEDOR') o ('COMPRADOR') protege cada ruta pública; todo el blueprint /admin exige ADMINISTRADOR en un solo lugar.</text>
+<text x="50" y="566" font-size="12.5" fill="#202b29">Los servicios comprueban que el inmueble o la visita sean del usuario de la sesión. El rol y el bloqueo de la cuenta se revisan en cada petición.</text>
+<text x="50" y="584" font-size="12.5" fill="#202b29">Un administrador no puede bloquearse, cambiarse el rol ni eliminarse, y siempre queda al menos uno activo.</text>
 </svg>

@@ -43,53 +43,28 @@
     </div>
 </section>
 
-<section class="home-section">
+<section class="home-section" data-tarjetas>
     <div class="section-heading">
         <div>
             <h2>Hallazgos recientes</h2>
             <p>Propiedades disponibles, recién llegadas al catálogo.</p>
         </div>
+        <div class="tarjetas-controles">
+            <button type="button" class="control-redondo" data-tarjetas-prev aria-label="Ver los inmuebles anteriores">{{ ico('flecha-izq') }}</button>
+            <button type="button" class="control-redondo" data-tarjetas-next aria-label="Ver más inmuebles">{{ ico('flecha-der') }}</button>
+        </div>
         <a href="{{ url_for('routes.catalog') }}" class="btn btn-outline btn-sm">Ver todos</a>
     </div>
 
     {% if destacados %}
-        <div class="properties-grid">
+        <div class="tarjetas-pista">
             {% for inmueble in destacados %}
-                <div class="property-card">
-                    <div class="property-header">
-                        <span class="property-type-icon">
-                            {{ ico_categoria(inmueble.categoria) }}
-                        </span>
-                        <span class="property-badge-op">{{ inmueble.operacion }}</span>
-                        <span class="property-badge-cat">{{ inmueble.categoria }}</span>
-                    </div>
-                    <div class="property-body">
-                        <div class="property-price">{{ inmueble.precio | cop }}</div>
-                        <h3 class="property-title">{{ inmueble.titulo }}</h3>
-                        <p class="property-location">{{ ico('ubicacion') }} {{ inmueble.ciudad }}, {{ inmueble.departamento }}</p>
-                        <p class="property-desc-short">{{ inmueble.descripcion }}</p>
-                        <div class="property-features">
-                            <span class="feature-item">{{ ico('area') }} {{ inmueble.area }} m²</span>
-                            {% if inmueble.habitaciones > 0 %}
-                                <span class="feature-item">{{ ico('cama') }} {{ inmueble.habitaciones }} hab</span>
-                            {% endif %}
-                            {% if inmueble.banos > 0 %}
-                                <span class="feature-item">{{ ico('ducha') }} {{ inmueble.banos }} baños</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="property-footer">
-                        <span class="badge badge-disponible">{{ inmueble.estado }}</span>
-                        <a href="{{ url_for('routes.property_detail', id_inmueble=inmueble.id_inmueble) }}" class="btn btn-primary btn-sm">
-                            Ver Detalle
-                        </a>
-                    </div>
-                </div>
+                {% include '_tarjeta_inmueble.html' %}
             {% endfor %}
         </div>
     {% else %}
         <div class="form-card" style="text-align: center;">
-            <p style="color: var(--text-muted);">No hay inmuebles disponibles en este momento.</p>
+            <p style="color: var(--text-muted);">Todavía no hay inmuebles disponibles. Vuelve pronto o revisa el catálogo.</p>
         </div>
     {% endif %}
 </section>

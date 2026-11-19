@@ -31,9 +31,18 @@
                 {% for item in inmuebles %}
                     <tr>
                         <td>
-                            <strong>{{ item.titulo }}</strong>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">
-                                {{ item.categoria }} &bull; {{ item.area }} m² &bull; {{ item.habitaciones }} hab &bull; {{ item.banos }} baños
+                            <div class="tabla-foto">
+                                {% if item.portada %}
+                                    <img src="{{ url_for('static', filename=item.portada) }}" alt="" width="72" height="46" loading="lazy">
+                                {% else %}
+                                    <span class="tabla-foto-vacia">{{ ico_categoria(item.categoria) }}</span>
+                                {% endif %}
+                                <div>
+                                    <strong>{{ item.titulo }}</strong>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                        {{ item.categoria }} &bull; {{ item.area }} m² &bull; {{ item.habitaciones }} hab &bull; {{ item.banos }} baños &bull; {{ item.total_imagenes }} foto{{ '' if item.total_imagenes == 1 else 's' }}
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td>{{ item.ciudad }}, {{ item.departamento }}</td>

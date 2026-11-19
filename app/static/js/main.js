@@ -1,5 +1,4 @@
 
-
 document.addEventListener('DOMContentLoaded', () => {
     
     const alertCloseButtons = document.querySelectorAll('.alert-close');

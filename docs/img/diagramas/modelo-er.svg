@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="Segoe UI, Arial, sans-serif">
 <rect width="1000" height="760" fill="#f3f0e8"/>
-<text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Modelo entidad-relación de InmoTech</text>
+<text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#183c3a">Modelo entidad-relación de InmoTech (8 tablas)</text>
 <path d="M155 134 L155 230" fill="none" stroke="#687571" stroke-width="2"/>
 <text x="161" y="150" font-size="12" font-weight="700" fill="#d26045">1</text>
 <text x="161" y="224" font-size="12" font-weight="700" fill="#d26045">N</text>
@@ -8,9 +8,9 @@
 <text x="326" y="373.0" font-size="11" fill="#687571">vende</text>
 <text x="274" y="266.0" font-size="12" font-weight="700" fill="#d26045">1</text>
 <text x="366" y="470.0" font-size="12" font-weight="700" fill="#d26045">N</text>
-<path d="M120 414 L120 691.0 L380 691.0" fill="none" stroke="#687571" stroke-width="2"/>
-<text x="126" y="552.5" font-size="11" fill="#687571">solicita</text>
-<text x="126" y="430" font-size="12" font-weight="700" fill="#d26045">1</text>
+<path d="M120 436 L120 691.0 L380 691.0" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="126" y="563.5" font-size="11" fill="#687571">solicita</text>
+<text x="126" y="452" font-size="12" font-weight="700" fill="#d26045">1</text>
 <text x="366" y="686.0" font-size="12" font-weight="700" fill="#d26045">N</text>
 <path d="M495 486 L495 540" fill="none" stroke="#687571" stroke-width="2"/>
 <text x="501" y="517.0" font-size="11" fill="#687571">recibe</text>
@@ -25,6 +25,10 @@
 <path d="M835 400 L835 326" fill="none" stroke="#687571" stroke-width="2"/>
 <text x="841" y="394" font-size="12" font-weight="700" fill="#d26045">1</text>
 <text x="841" y="342" font-size="12" font-weight="700" fill="#d26045">N</text>
+<path d="M610 480 L650 480 L650 689 L720 689" fill="none" stroke="#687571" stroke-width="2"/>
+<text x="655" y="584.5" font-size="11" fill="#687571">fotos</text>
+<text x="616" y="495" font-size="12" font-weight="700" fill="#d26045">1</text>
+<text x="706" y="684" font-size="12" font-weight="700" fill="#d26045">N</text>
 <rect x="40" y="60" width="230" height="74" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
 <path d="M40 90 V70 a10 10 0 0 1 10 -10 H260 a10 10 0 0 1 10 10 V90 Z" fill="#183c3a"/>
 <text x="54" y="80" font-size="15" font-weight="700" fill="#fffdf8">rol</text>
@@ -34,7 +38,7 @@
 <text x="54" y="127" font-size="12.5" fill="#202b29">nombre</text>
 <text x="256" y="127" text-anchor="end" font-size="11" font-weight="700" fill="#32735b">UQ</text>
 <rect x="40" y="60" width="230" height="74" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
-<rect x="40" y="230" width="230" height="184" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<rect x="40" y="230" width="230" height="206" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
 <path d="M40 260 V240 a10 10 0 0 1 10 -10 H260 a10 10 0 0 1 10 10 V260 Z" fill="#183c3a"/>
 <text x="54" y="250" font-size="15" font-weight="700" fill="#fffdf8">usuario</text>
 <text x="54" y="275" font-size="12.5" fill="#202b29">id_usuario</text>
@@ -50,7 +54,9 @@
 <text x="54" y="385" font-size="12.5" fill="#202b29">telefono</text>
 <text x="54" y="407" font-size="12.5" fill="#202b29">id_rol</text>
 <text x="256" y="407" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
-<rect x="40" y="230" width="230" height="184" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="41" y="414" width="228" height="22" fill="#f3f0e8"/>
+<text x="54" y="429" font-size="12.5" fill="#202b29">activo</text>
+<rect x="40" y="230" width="230" height="206" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
 <rect x="380" y="170" width="230" height="316" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
 <path d="M380 200 V180 a10 10 0 0 1 10 -10 H600 a10 10 0 0 1 10 10 V200 Z" fill="#183c3a"/>
 <text x="394" y="190" font-size="15" font-weight="700" fill="#fffdf8">inmueble</text>
@@ -122,6 +128,19 @@
 <text x="734" y="467" font-size="12.5" fill="#202b29">nombre</text>
 <text x="936" y="467" text-anchor="end" font-size="11" font-weight="700" fill="#32735b">UQ</text>
 <rect x="720" y="400" width="230" height="74" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
+<rect x="720" y="560" width="230" height="140" rx="10" fill="#fffdf8" stroke="#183c3a" stroke-width="2"/>
+<path d="M720 590 V570 a10 10 0 0 1 10 -10 H940 a10 10 0 0 1 10 10 V590 Z" fill="#183c3a"/>
+<text x="734" y="580" font-size="15" font-weight="700" fill="#fffdf8">imagen_inmueble</text>
+<text x="734" y="605" font-size="12.5" fill="#202b29">id_imagen</text>
+<text x="936" y="605" text-anchor="end" font-size="11" font-weight="700" fill="#d26045">PK</text>
+<rect x="721" y="612" width="228" height="22" fill="#f3f0e8"/>
+<text x="734" y="627" font-size="12.5" fill="#202b29">ruta</text>
+<text x="734" y="649" font-size="12.5" fill="#202b29">descripcion</text>
+<rect x="721" y="656" width="228" height="22" fill="#f3f0e8"/>
+<text x="734" y="671" font-size="12.5" fill="#202b29">orden</text>
+<text x="734" y="693" font-size="12.5" fill="#202b29">id_inmueble</text>
+<text x="936" y="693" text-anchor="end" font-size="11" font-weight="700" fill="#376879">FK</text>
+<rect x="720" y="560" width="230" height="140" rx="10" fill="none" stroke="#183c3a" stroke-width="2"/>
 <text x="40" y="735" font-size="12" font-weight="700" fill="#d26045">PK</text><text x="62" y="735" font-size="12" fill="#687571">llave primaria</text>
 <text x="170" y="735" font-size="12" font-weight="700" fill="#376879">FK</text><text x="192" y="735" font-size="12" fill="#687571">llave foránea</text>
 <text x="290" y="735" font-size="12" font-weight="700" fill="#32735b">UQ</text><text x="314" y="735" font-size="12" fill="#687571">valor único</text>

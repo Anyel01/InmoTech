@@ -1,0 +1,90 @@
+{% extends 'admin/_layout.html' %}
+{% from 'admin/_macros.html' import paginador with context %}
+
+{% block title %}Visitas - Administración - InmoTech{% endblock %}
+{% block admin_titulo %}Visitas{% endblock %}
+{% block admin_subtitulo %}<p>Solicitudes de visita de todos los compradores. Aquí puedes cambiar el estado de cualquiera.</p>{% endblock %}
+{% block admin_acciones %}
+    <a href="{{ url_for('admin.visitas_exportar', **request.args) }}" class="btn btn-outline btn-sm">{{ ico('descargar') }} Exportar CSV</a>
+{% endblock %}
+
+{% block admin_cuerpo %}
+<form method="GET" action="{{ url_for('admin.visitas') }}" class="filter-bar admin-filtros" role="search">
+    <div class="filter-grid">
+        <div class="form-group">
+            <label for="f-q" class="form-label">Buscar</label>
+            <input type="search" id="f-q" name="q" class="form-control" placeholder="Inmueble o persona" value="{{ filtros.q }}">
+        </div>
+        <div class="form-group">
+            <label for="f-estado" class="form-label">Estado</label>
+            <select id="f-estado" name="estado" class="form-select">
+                <option value="">Todos</option>
+                {% for e in estados %}<option value="{{ e }}"{% if filtros.estado == e %} selected{% endif %}>{{ e|capitalize }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="f-desde" class="form-label">Desde</label>
+            <input type="date" id="f-desde" name="desde" class="form-control" value="{{ filtros.desde }}">
+        </div>
+        <div class="form-group">
+            <label for="f-hasta" class="form-label">Hasta</label>
+            <input type="date" id="f-hasta" name="hasta" class="form-control" value="{{ filtros.hasta }}">
+        </div>
+        <div class="admin-filtros-botones">
+            <a href="{{ url_for('admin.visitas') }}" class="btn btn-outline btn-sm">Quitar filtros</a>
+            <button type="submit" class="btn btn-primary btn-sm">{{ ico('buscar') }} Filtrar</button>
+        </div>
+    </div>
+</form>
+
+{% if visitas %}
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Fecha y hora</th>
+                    <th>Inmueble</th>
+                    <th>Comprador</th>
+                    <th>Vendedor</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in visitas %}
+                    <tr>
+                        <td class="celda-fecha"><strong>{{ v.fecha_visita | fecha }}</strong></td>
+                        <td>
+                            <a href="{{ url_for('routes.property_detail', id_inmueble=v.id_inmueble) }}">{{ v.inmueble_titulo }}</a>
+                            <div class="celda-secundaria">{{ v.inmueble_ciudad }}</div>
+                            {% if v.mensaje %}<div class="celda-mensaje" title="{{ v.mensaje }}">«{{ v.mensaje }}»</div>{% endif %}
+                        </td>
+                        <td>
+                            {{ v.comprador_nombre }}
+                            <div class="celda-secundaria">{{ v.comprador_correo }}<br>{{ v.comprador_telefono }}</div>
+                        </td>
+                        <td>{{ v.vendedor_nombre }}</td>
+                        <td>
+                            <span class="badge badge-{{ v.estado|lower }}">{{ v.estado }}</span>
+                            <form method="POST" action="{{ url_for('admin.visita_estado', id_visita=v.id_visita) }}" class="estado-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <input type="hidden" name="volver" value="{{ request.full_path.rstrip('?') }}">
+                                <label for="estado-{{ v.id_visita }}" class="sr-only">Nuevo estado de la visita a {{ v.inmueble_titulo }}</label>
+                                <select id="estado-{{ v.id_visita }}" name="estado" class="form-select">
+                                    {% for e in estados %}<option value="{{ e }}"{% if e == v.estado %} selected{% endif %}>{{ e|capitalize }}</option>{% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-outline btn-sm">Guardar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ paginador(pagina) }}
+{% else %}
+    <div class="form-card vacio-tarjeta">
+        <p>Ninguna visita coincide con estos filtros. Prueba con otro estado u otras fechas.</p>
+        <a href="{{ url_for('admin.visitas') }}" class="btn btn-outline btn-sm">Quitar filtros</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{# Esqueleto de todas las páginas del panel: menú lateral + cabecera + cuerpo.
+   Cada página define admin_titulo, admin_subtitulo (opcional), admin_acciones (opcional) y admin_cuerpo.
+   La variable "seccion" marca el enlace activo del menú. #}
+{% extends 'base.html' %}
+
+{% block estilos %}<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">{% endblock %}
+
+{% block content %}
+<div class="admin">
+    <aside class="admin-menu" aria-label="Menú de administración">
+        <p class="admin-menu-titulo">{{ ico('escudo') }} Administración</p>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"{% if seccion == 'resumen' %} aria-current="page"{% endif %}>{{ ico('panel') }} Resumen</a></li>
+                <li><a href="{{ url_for('admin.usuarios') }}"{% if seccion == 'usuarios' %} aria-current="page"{% endif %}>{{ ico('usuarios') }} Usuarios</a></li>
+                <li><a href="{{ url_for('admin.inmuebles') }}"{% if seccion == 'inmuebles' %} aria-current="page"{% endif %}>{{ ico('casa') }} Inmuebles</a></li>
+                <li><a href="{{ url_for('admin.visitas') }}"{% if seccion == 'visitas' %} aria-current="page"{% endif %}>{{ ico('calendario') }} Visitas</a></li>
+                <li><a href="{{ url_for('admin.catalogos') }}"{% if seccion == 'catalogos' %} aria-current="page"{% endif %}>{{ ico('catalogo') }} Catálogos</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="admin-contenido">
+        <header class="admin-cabecera">
+            <div>
+                <h1>{% block admin_titulo %}{% endblock %}</h1>
+                {% block admin_subtitulo %}{% endblock %}
+            </div>
+            <div class="admin-acciones">{% block admin_acciones %}{% endblock %}</div>
+        </header>
+
+        {% block admin_cuerpo %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

@@ -71,6 +71,9 @@ def create_app():
     )
     app.config['SESSION_COOKIE_HTTPONLY'] = True
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+    # Un formulario puede traer hasta 8 fotos de 4 MB; este es el tope de toda la petición
+    app.config['MAX_CONTENT_LENGTH'] = 36 * 1024 * 1024
     
     # Configuración del correo electrónico
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -92,7 +95,11 @@ def create_app():
     app.jinja_env.globals['ico_categoria'] = ico_categoria
 
     from app.routes import routes_bp
+    from app.admin import admin_bp
+    from app.auth import sincronizar_sesion
     app.register_blueprint(routes_bp)
+    app.register_blueprint(admin_bp)
+    app.before_request(sincronizar_sesion)
 
     @app.errorhandler(404)
     def pagina_no_encontrada(e):
@@ -101,6 +108,16 @@ def create_app():
     @app.errorhandler(403)
     def acceso_prohibido(e):
         return render_template('base.html', error_status=403, error_msg="No tienes autorización para acceder a este recurso."), 403
+
+    @app.errorhandler(413)
+    def archivo_demasiado_grande(e):
+        return render_template('base.html', error_status=413, error_msg="Las fotos juntas pesan demasiado. Sube menos fotos o redúcelas e inténtalo de nuevo."), 413
+
+    @app.after_request
+    def cabeceras_de_seguridad(respuesta):
+        # Evita que el navegador interprete un archivo subido como otro tipo
+        respuesta.headers.setdefault('X-Content-Type-Options', 'nosniff')
+        return respuesta
 
     @app.errorhandler(500)
     def error_interno(e):

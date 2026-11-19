@@ -23,14 +23,18 @@
             {{ ico('ubicacion') }} {{ inmueble.direccion }}, {{ inmueble.ciudad }} ({{ inmueble.departamento }})
         </p>
 
-        <div class="property-showcase">
-            <span class="property-showcase-icon">
-                {{ ico_categoria(inmueble.categoria) }}
-            </span>
-            <span class="property-showcase-label">
-                {{ inmueble.categoria }} en {{ inmueble.operacion }}
-            </span>
-        </div>
+        {% if imagenes %}
+            {% include '_galeria.html' %}
+        {% else %}
+            <div class="property-showcase">
+                <span class="property-showcase-icon">
+                    {{ ico_categoria(inmueble.categoria) }}
+                </span>
+                <span class="property-showcase-label">
+                    {{ inmueble.categoria }} en {{ inmueble.operacion }}
+                </span>
+            </div>
+        {% endif %}
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 2rem; background-color: #f8fafc; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
             <div style="text-align: center;">

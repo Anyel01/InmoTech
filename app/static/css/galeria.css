@@ -1,0 +1,700 @@
+/* Fotos de los inmuebles: carrusel, vista ampliada, vista rápida y vista previa
+   al publicar. Usa los tokens de theme.css (colores, sombras, radios). */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Los componentes de abajo fijan su propio display, esto hace que hidden siempre gane */
+[hidden] {
+  display: none !important;
+}
+
+html.con-modal {
+  overflow: hidden;
+}
+
+/* Botón redondo que se reutiliza en flechas, cerrar y ampliar */
+.control-redondo {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(24, 60, 58, .18);
+  border-radius: 50%;
+  background: rgba(255, 253, 248, .95);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.control-redondo:hover {
+  background: #fff;
+}
+
+.control-redondo:active {
+  transform: scale(.94);
+}
+
+/* Carrusel */
+.galeria {
+  display: grid;
+  gap: .75rem;
+  margin-bottom: 2rem;
+}
+
+.galeria-escenario {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 6px 26px 6px 26px;
+  background: var(--primary);
+  box-shadow: var(--shadow-md);
+  touch-action: pan-y;
+  cursor: zoom-in;
+}
+
+.galeria-pista {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 380ms cubic-bezier(.2, .75, .25, 1);
+}
+
+.galeria-slide {
+  flex: 0 0 100%;
+  height: 100%;
+}
+
+.galeria-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.galeria-info {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2.6rem 1.1rem .9rem;
+  background: linear-gradient(to top, rgba(14, 28, 27, .82), rgba(14, 28, 27, 0));
+  color: #fffdf8;
+  pointer-events: none;
+}
+
+.galeria-pie {
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.galeria-contador {
+  flex: none;
+  padding: .15rem .65rem;
+  border: 1px solid rgba(255, 253, 248, .38);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, .14);
+  font-size: .82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.galeria-flecha {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.galeria-prev {
+  left: .9rem;
+}
+
+.galeria-next {
+  right: .9rem;
+}
+
+.galeria-expandir {
+  position: absolute;
+  top: .9rem;
+  right: .9rem;
+  width: 44px;
+  height: 44px;
+}
+
+.galeria-miniaturas {
+  display: flex;
+  gap: .5rem;
+  margin: 0;
+  padding: .3rem;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.galeria-miniaturas button {
+  display: block;
+  width: 96px;
+  aspect-ratio: 16 / 10;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 4px 14px 4px 14px;
+  background: var(--primary);
+  opacity: .7;
+  cursor: pointer;
+  transition: opacity var(--transition), border-color var(--transition);
+}
+
+.galeria-miniaturas button:hover {
+  opacity: 1;
+}
+
+.galeria-miniaturas button[aria-current="true"] {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+.galeria-miniaturas img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Con una sola foto sobran los controles de navegación */
+.galeria[data-total="1"] .galeria-flecha,
+.galeria[data-total="1"] .galeria-miniaturas,
+.galeria[data-total="1"] .galeria-contador {
+  display: none;
+}
+
+/* Vista ampliada */
+dialog.visor {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fffdf8;
+}
+
+dialog.visor::backdrop {
+  background: rgba(14, 28, 27, .94);
+}
+
+.visor-marco {
+  position: relative;
+  display: grid;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 1rem;
+}
+
+.visor-imagen {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+.visor-imagen img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 4px 20px 4px 20px;
+  object-fit: contain;
+}
+
+.visor-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: .85rem;
+}
+
+.visor-pie p {
+  margin: 0;
+}
+
+.visor-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+.visor .galeria-prev {
+  left: 1rem;
+}
+
+.visor .galeria-next {
+  right: 1rem;
+}
+
+/* Vista rápida */
+dialog.rapida {
+  width: min(1020px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto; /* el reset global de styles.css quita el centrado propio del <dialog> */
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 8px 30px 8px 30px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-dark);
+}
+
+dialog.rapida::backdrop {
+  background: rgba(20, 38, 36, .62);
+}
+
+.rapida-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+}
+
+.rapida-fotos {
+  padding: 1.2rem 0 1.2rem 1.2rem;
+}
+
+.rapida-fotos .galeria {
+  margin-bottom: 0;
+}
+
+.rapida-info {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  padding: 1.6rem 1.6rem 1.6rem 1.4rem;
+}
+
+.rapida-info h2 {
+  margin: 0;
+  padding-right: 2.6rem;
+  color: var(--primary);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.55rem;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+
+.rapida-precio {
+  color: var(--accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.rapida-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.rapida-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: .92rem;
+}
+
+.rapida-descripcion {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  color: #3a4643;
+  line-height: 1.65;
+}
+
+.rapida-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: auto;
+  padding-top: .6rem;
+}
+
+.rapida-cerrar {
+  position: absolute;
+  top: .9rem;
+  right: .9rem;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+}
+
+.rapida-estado {
+  display: grid;
+  min-height: 320px;
+  place-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Tarjetas con foto (inicio, catálogo) */
+.property-header {
+  position: relative;
+}
+
+.property-foto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-header--foto::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(14, 28, 27, .55), rgba(14, 28, 27, 0) 40%, rgba(14, 28, 27, 0) 60%, rgba(14, 28, 27, .6));
+  content: "";
+}
+
+.property-header--foto .property-badge-op,
+.property-header--foto .property-badge-cat {
+  z-index: 2;
+}
+
+.property-fotos-total,
+.btn-vista-rapida {
+  position: absolute;
+  bottom: .75rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 36px;
+  padding: .25rem .8rem;
+  border: 1px solid rgba(255, 253, 248, .5);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, .94);
+  color: var(--primary);
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.btn-vista-rapida {
+  left: .75rem;
+  cursor: pointer;
+}
+
+.btn-vista-rapida:hover {
+  background: #fff;
+}
+
+.property-fotos-total {
+  right: .75rem;
+  background: rgba(14, 28, 27, .68);
+  color: #fffdf8;
+}
+
+/* Carrusel de tarjetas del inicio */
+.tarjetas-carrusel {
+  position: relative;
+}
+
+.tarjetas-pista {
+  display: grid;
+  grid-auto-columns: min(360px, 86%);
+  grid-auto-flow: column;
+  gap: 1.2rem;
+  padding: .4rem .2rem 1.4rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: .2rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.tarjetas-pista > * {
+  scroll-snap-align: start;
+}
+
+.tarjetas-controles {
+  display: flex;
+  gap: .5rem;
+}
+
+.tarjetas-controles .control-redondo:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.section-heading .tarjetas-controles {
+  margin-left: auto;
+}
+
+/* Miniatura en la tabla del vendedor */
+.tabla-foto {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+
+.tabla-foto img,
+.tabla-foto-vacia {
+  flex: none;
+  width: 72px;
+  height: 46px;
+  border-radius: 3px 10px 3px 10px;
+  object-fit: cover;
+}
+
+.tabla-foto-vacia {
+  display: grid;
+  place-items: center;
+  background: var(--bg-main);
+  color: var(--text-muted);
+}
+
+/* Publicar: fotos y vista previa */
+.publicar-layout {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vista-previa {
+  align-self: start;
+}
+
+.vista-previa h2 {
+  margin: 0 0 .25rem;
+  color: var(--primary);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.vista-previa > p {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+
+.vista-previa .property-card {
+  pointer-events: none;
+}
+
+.vista-previa .property-card:hover {
+  transform: none;
+}
+
+@media (min-width: 1100px) {
+  .publicar-layout {
+    grid-template-columns: minmax(0, 800px) minmax(300px, 360px);
+  }
+
+  .vista-previa {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+.fotos-campo {
+  margin-bottom: 1.4rem;
+}
+
+.fotos-zona {
+  padding: 1.4rem;
+  border: 2px dashed #c1bfb3;
+  border-radius: 10px 26px 10px 26px;
+  background: rgba(255, 253, 248, .6);
+  text-align: center;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.fotos-zona.arrastrando {
+  border-color: var(--accent);
+  background: rgba(181, 71, 47, .07);
+}
+
+.fotos-zona p {
+  margin: .5rem 0 0;
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+
+.fotos-zona input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.fotos-error {
+  margin: .7rem 0 0;
+  color: var(--danger);
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.fotos-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: .8rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.foto-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(24, 60, 58, .15);
+  border-radius: 5px 18px 5px 18px;
+  background: #fff;
+}
+
+.foto-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.foto-item.quitada img {
+  opacity: .3;
+  filter: grayscale(1);
+}
+
+.foto-marca {
+  position: absolute;
+  top: .5rem;
+  left: .5rem;
+  padding: .15rem .6rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.foto-pie {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  padding: .5rem .6rem .6rem;
+  font-size: .8rem;
+}
+
+.foto-nombre {
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.foto-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem .8rem;
+}
+
+.foto-acciones button,
+.foto-acciones label {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary);
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.foto-acciones .peligro {
+  color: var(--danger);
+}
+
+@media (max-width: 760px) {
+  .rapida-cuerpo {
+    grid-template-columns: 1fr;
+  }
+
+  .rapida-fotos {
+    padding: 3.5rem 1rem 0; 
+  }
+
+  .rapida-info {
+    padding: 1.2rem 1.2rem 1.4rem;
+  }
+
+  .galeria-escenario {
+    border-radius: 5px 20px 5px 20px;
+  }
+
+  .galeria-miniaturas button {
+    width: 76px;
+  }
+
+  .visor-marco {
+    padding: .6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galeria-pista {
+    transition: none;
+  }
+
+  .tarjetas-pista {
+    scroll-behavior: auto;
+  }
+}
+
+/* Foco visible del selector de archivos (el <input> va oculto y la etiqueta hace de botón) */
+.fotos-zona input[type="file"]:focus-visible + label {
+  outline: 3px solid rgba(181, 71, 47, .65);
+  outline-offset: 3px;
+}
+
+.rapida-etiquetas .badge {
+  background: var(--primary);
+  color: #fffdf8;
+}

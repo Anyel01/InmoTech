@@ -17,12 +17,14 @@ La primera versión de cualquier proyecto suele mezclar todo en las rutas: valid
 | Archivo | Capa | Qué hace | Qué no debe hacer |
 |---|---|---|---|
 | `app/routes.py` | Presentación | Lee la petición, llama al servicio, devuelve plantilla o redirección, muestra mensajes | Validar reglas de negocio, escribir SQL |
-| `app/services.py` | Negocio | Valida datos, aplica reglas (fecha futura, dueño del inmueble, transiciones de estado) y lanza `ValueError` o `PermissionError` | Conocer Flask, escribir SQL |
-| `app/repositories.py` | Datos | Contiene todo el SQL, una clase por entidad (`UsuarioRepository`, `InmuebleRepository`, `VisitaRepository`, `UbicacionCategoriaRepository`) | Tomar decisiones de negocio |
+| `app/services.py` | Negocio | Valida datos, aplica reglas (fecha futura, dueño del inmueble, transiciones de estado, formato y cantidad de fotos) y lanza `ValueError` o `PermissionError` | Escribir SQL |
+| `app/repositories.py` | Datos | Contiene todo el SQL, una clase por entidad (`UsuarioRepository`, `InmuebleRepository`, `VisitaRepository`, `ImagenRepository`, `UbicacionCategoriaRepository`) | Tomar decisiones de negocio |
 | `app/db.py` | Infraestructura | Abre la conexión, elige el motor, hace commit o rollback | Contener consultas de la aplicación |
 | `app/auth.py` | Transversal | Guarda y lee la sesión, decoradores de rol, token CSRF | — |
+| `app/admin/` | Las tres capas del panel de administración | Su propio `routes.py`, `services.py` y `repositories.py`, más el blueprint `/admin` | Mezclarse con el código de las pantallas públicas |
 | `app/__init__.py` | Arranque | `create_app()`: configuración, filtros de plantilla (`cop`, `fecha`), iconos, páginas de error | — |
-| `app/templates/` | Presentación | HTML con Jinja2; todas heredan de `base.html` | Lógica de negocio |
+| `app/templates/` | Presentación | HTML con Jinja2; todas heredan de `base.html`. Los fragmentos que se repiten viven en parciales con guion bajo (`_tarjeta_inmueble.html`, `_galeria.html`) | Lógica de negocio |
+| `app/static/js/` | Presentación | `main.js` (avisos, ciudades por departamento), `carrusel.js` (carrusel, vista ampliada, vista rápida) y `subida-fotos.js` (previsualización al publicar) | Reglas de negocio: todo se vuelve a validar en el servidor |
 
 ## Cómo viaja una petición
 
@@ -57,6 +59,61 @@ Ejemplo: un comprador pide una visita.
 | GET | `/visitas-recibidas` | Vendedor | Visitas a sus inmuebles |
 | POST | `/visitas-recibidas/<id>/cambiar-estado` | Vendedor dueño | Confirmar, rechazar o marcar realizada |
 | GET | `/api/ciudades/<id_departamento>` | Todos | JSON con las ciudades de un departamento (lo usa el formulario de publicar) |
+| GET | `/api/inmuebles/<id>` | Todos | JSON con los datos públicos de un inmueble y sus fotos (lo usa la vista rápida del catálogo) |
+
+## Fotos de los inmuebles
+
+Es la parte con más piezas, así que se resume aquí el recorrido completo.
+
+**Al publicar o editar** (`POST /inmuebles/nuevo` y `/inmuebles/<id>/editar`, con `enctype="multipart/form-data"`):
+
+1. La ruta pasa `request.files.getlist('fotos')` al servicio.
+2. `ImagenService.preparar` revisa **todas** las fotos antes de guardar nada: extensión permitida, peso máximo (4 MB), formato real por los primeros bytes del archivo (JPG, PNG o WebP) y cantidad máxima (8 por inmueble). Si una falla, lanza `ValueError` y no se crea ni se modifica nada.
+3. Se crea o actualiza el inmueble.
+4. `ImagenService.guardar` escribe cada archivo en `app/static/uploads/inmuebles/` con un nombre aleatorio (nunca se usa el nombre que trae el usuario) y registra las rutas en una sola transacción.
+5. Al editar también se aplican los cambios sobre las fotos actuales: las marcadas "Quitar" se borran (fila y archivo, solo si fue subido por un vendedor) y la elegida como portada pasa a `orden = 1`.
+
+**Al mostrarlas:**
+
+| Pantalla | Qué muestra | De dónde salen los datos |
+|---|---|---|
+| Inicio y catálogo | Portada y número de fotos en cada tarjeta | Subconsultas `portada` y `total_imagenes` en los listados |
+| Inicio | Las tarjetas recientes en un carrusel horizontal con flechas | `carrusel.js`, `[data-tarjetas]` |
+| Catálogo e inicio | Botón "Vista rápida": ventana con carrusel y datos del inmueble | `GET /api/inmuebles/<id>`; la respuesta se guarda en memoria para no repetir la consulta |
+| Detalle | Carrusel con miniaturas y vista ampliada | `_galeria.html`, renderizado en el servidor |
+| Mis inmuebles | Miniatura y número de fotos | Subconsultas de `find_by_vendedor` |
+| Publicar y editar | Fotos nuevas con vista previa, y una tarjeta que muestra cómo quedará la publicación | `subida-fotos.js` |
+
+El carrusel del detalle se dibuja en el servidor (funciona aunque falle el JavaScript) y el de la vista rápida se arma en el navegador con el mismo HTML. Si el inmueble no tiene fotos, el detalle muestra el icono de su categoría como antes.
+
+## Panel de administración
+
+Es un subsistema con las mismas tres capas, en su propio paquete para no mezclarlo con las pantallas públicas:
+
+| Archivo | Qué hace |
+|---|---|
+| `app/admin/__init__.py` | Crea el blueprint `admin` con el prefijo `/admin` |
+| `app/admin/routes.py` | Las rutas. Un único `before_request` exige sesión y rol ADMINISTRADOR y valida el CSRF en todo `POST`, así una ruta nueva queda protegida sin decorarla |
+| `app/admin/services.py` | Reglas: validación de usuarios, protecciones (no bloquearse, no dejar el sistema sin administradores, no borrar lo que tiene historial), paginación, exportación a CSV y cálculo de las cifras del resumen |
+| `app/admin/repositories.py` | Todo el SQL del panel: estadísticas, listados con filtros y paginación, y el CRUD de usuarios y catálogos |
+| `app/templates/admin/` | Menú lateral común (`_layout.html`), piezas repetidas (`_macros.html`) y una plantilla por pantalla |
+
+| Ruta | Función |
+|---|---|
+| `GET /admin/` | Resumen con estadísticas |
+| `GET /admin/usuarios` · `/nuevo` · `/<id>/editar` | Listado con filtros, alta y edición |
+| `POST /admin/usuarios/<id>/estado` · `/password` · `/eliminar` | Bloquear o reactivar, restablecer contraseña, eliminar |
+| `GET /admin/inmuebles` · `/<id>/editar` | Listado de todos los inmuebles y edición (reutiliza el formulario del vendedor, con fotos) |
+| `POST /admin/inmuebles/<id>/estado` · `/eliminar` | Pausar o publicar, eliminar |
+| `GET /admin/visitas` · `POST /admin/visitas/<id>/estado` | Listado y cambio de estado |
+| `GET /admin/catalogos` · `POST /admin/catalogos/<entidad>/nuevo` · `/<id>/editar` · `/<id>/eliminar` | Categorías, departamentos y ciudades |
+| `GET /admin/usuarios/exportar.csv` · `inmuebles/exportar.csv` · `visitas/exportar.csv` | Exportaciones que respetan los filtros activos |
+
+**Actuar en nombre del dueño.** El administrador no tiene una ruta aparte para editar o pausar un inmueble: el servicio busca al vendedor dueño y llama al mismo `InmuebleService` que usa el vendedor, así las reglas y las fotos funcionan igual.
+
+**La sesión siempre al día.** `auth.sincronizar_sesion` corre antes de cada petición y compara la sesión con la base de datos. Si el administrador bloquea una cuenta, esa persona queda fuera en su siguiente clic; si le cambia el rol, la sesión abierta lo refleja sin volver a iniciar sesión. Cuesta una lectura por petición, que en SQLite es despreciable.
+
+**Después de iniciar sesión**, el administrador va directo a `/admin/`, y la barra superior le muestra el enlace al panel.
 
 ## Decisiones de diseño
 
