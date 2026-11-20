@@ -105,35 +105,3 @@ InmoTech/
 ```
 
 ![Arquitectura en capas](docs/img/diagramas/arquitectura.svg)
-
-## Documentación
-
-| Documento | De qué trata |
-|---|---|
-| [Arquitectura](docs/arquitectura.md) | Capas, responsabilidades de cada archivo, rutas y recorrido de una petición |
-| [Base de datos](docs/base-de-datos.md) | Diseño, modelo entidad-relación, diccionario de datos, scripts y cómo la usa la aplicación |
-| [Guía de uso](docs/guia-de-uso.md) | Qué hace cada rol, pantalla por pantalla, y el ciclo de vida de una visita |
-| [Seguridad](docs/seguridad.md) | Contraseñas, CSRF, sesiones, control de acceso, SQL parametrizado y subida de archivos |
-| [Diseño](docs/diseno.md) | Dirección visual, componentes de fotos, revisión de accesibilidad y criterios de redacción |
-
-## Pantallas
-
-| | |
-|---|---|
-| ![Catálogo](docs/img/capturas/02-catalogo.png) | ![Detalle](docs/img/capturas/03-detalle.png) |
-| Catálogo con filtros | Detalle de un inmueble |
-| ![Vista rápida](docs/img/capturas/12-vista-rapida.png) | ![Editar fotos](docs/img/capturas/13-vendedor-editar-fotos.png) |
-| Vista rápida desde el catálogo | Editar con fotos y vista previa |
-| ![Panel del vendedor](docs/img/capturas/05-vendedor-mis-inmuebles.png) | ![Visitas del comprador](docs/img/capturas/08-comprador-mis-visitas.png) |
-| Panel del vendedor | Solicitudes del comprador |
-| ![Resumen del administrador](docs/img/capturas/14-admin-resumen.png) | ![Usuarios](docs/img/capturas/15-admin-usuarios.png) |
-| Panel de administración: resumen | Panel de administración: usuarios |
-
-En la [guía de uso](docs/guia-de-uso.md) están todas.
-
-## Pendientes y mejoras
-
-- Reprocesar las fotos subidas (redimensionar y quitar metadatos).
-- Límite de intentos en el inicio de sesión.
-- Pruebas automáticas.
-- Reutilizar conexiones a la base de datos en vez de abrir una por consulta.
