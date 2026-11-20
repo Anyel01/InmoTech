@@ -1,5 +1,4 @@
-/* Fotos de los inmuebles: carrusel, vista ampliada, vista rápida y vista previa
-   al publicar. Usa los tokens de theme.css (colores, sombras, radios). */
+
 
 .sr-only {
   position: absolute;
@@ -13,7 +12,6 @@
   border: 0;
 }
 
-/* Los componentes de abajo fijan su propio display, esto hace que hidden siempre gane */
 [hidden] {
   display: none !important;
 }
@@ -22,7 +20,6 @@ html.con-modal {
   overflow: hidden;
 }
 
-/* Botón redondo que se reutiliza en flechas, cerrar y ampliar */
 .control-redondo {
   display: grid;
   width: 46px;
@@ -182,14 +179,12 @@ html.con-modal {
   object-fit: cover;
 }
 
-/* Con una sola foto sobran los controles de navegación */
 .galeria[data-total="1"] .galeria-flecha,
 .galeria[data-total="1"] .galeria-miniaturas,
 .galeria[data-total="1"] .galeria-contador {
   display: none;
 }
 
-/* Vista ampliada */
 dialog.visor {
   width: 100vw;
   max-width: none;
@@ -253,11 +248,10 @@ dialog.visor::backdrop {
   right: 1rem;
 }
 
-/* Vista rápida */
 dialog.rapida {
   width: min(1020px, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
-  margin: auto; /* el reset global de styles.css quita el centrado propio del <dialog> */
+  margin: auto; 
   padding: 0;
   overflow: auto;
   border: 0;
@@ -364,7 +358,6 @@ dialog.rapida::backdrop {
   color: var(--text-muted);
 }
 
-/* Tarjetas con foto (inicio, catálogo) */
 .property-header {
   position: relative;
 }
@@ -423,7 +416,6 @@ dialog.rapida::backdrop {
   color: #fffdf8;
 }
 
-/* Carrusel de tarjetas del inicio */
 .tarjetas-carrusel {
   position: relative;
 }
@@ -459,7 +451,6 @@ dialog.rapida::backdrop {
   margin-left: auto;
 }
 
-/* Miniatura en la tabla del vendedor */
 .tabla-foto {
   display: flex;
   align-items: center;
@@ -482,7 +473,6 @@ dialog.rapida::backdrop {
   color: var(--text-muted);
 }
 
-/* Publicar: fotos y vista previa */
 .publicar-layout {
   display: grid;
   gap: 1.5rem;
@@ -688,7 +678,6 @@ dialog.rapida::backdrop {
   }
 }
 
-/* Foco visible del selector de archivos (el <input> va oculto y la etiqueta hace de botón) */
 .fotos-zona input[type="file"]:focus-visible + label {
   outline: 3px solid rgba(181, 71, 47, .65);
   outline-offset: 3px;

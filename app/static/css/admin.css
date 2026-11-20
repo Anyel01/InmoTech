@@ -1,4 +1,3 @@
-/* Panel de administración. Usa los tokens de theme.css (colores, sombras, radios). */
 
 .admin {
   display: grid;
@@ -7,7 +6,6 @@
   align-items: start;
 }
 
-/* menú lateral */
 .admin-menu {
   position: sticky;
   top: 5.5rem;
@@ -58,7 +56,6 @@
   color: #fffdf8;
 }
 
-/* cabecera de página */
 .admin-cabecera {
   display: flex;
   flex-wrap: wrap;
@@ -112,7 +109,6 @@
   font-weight: 600;
 }
 
-/* Números en la misma fuente sans del resto del sitio, con cifras proporcionales */
 .cifra-valor {
   margin: .25rem 0 .2rem;
   color: var(--primary);
@@ -163,7 +159,6 @@
   border-left: 4px solid var(--warning);
 }
 
-/* gráficos */
 .graficos,
 .recientes {
   display: grid;
@@ -206,7 +201,6 @@
   margin-top: 1rem;
 }
 
-/* Barras horizontales: una sola serie, una sola tinta, valor en la punta */
 .barras {
   display: grid;
   gap: .8rem;
@@ -253,7 +247,6 @@
   font-weight: 400;
 }
 
-/* Una sola barra dividida en partes: visitas por estado */
 .segmentos {
   display: flex;
   gap: 2px;
@@ -324,7 +317,6 @@
   text-align: center;
 }
 
-/* actividad reciente */
 .lista-simple {
   display: grid;
   gap: .75rem;
@@ -362,7 +354,6 @@ ol.lista-simple {
   font-weight: 700;
 }
 
-/* listados */
 .admin-filtros {
   margin-bottom: 1.2rem;
 }
@@ -379,7 +370,6 @@ ol.lista-simple {
   justify-content: flex-end;
 }
 
-/* Celda del inmueble: foto y texto sin apretarse */
 .data-table .tabla-foto {
   min-width: 250px;
 }
@@ -454,7 +444,6 @@ ol.lista-simple {
 .badge-bloqueada { background: #f5e1dc; color: #8f3329; }
 .badge-operacion { background: #e8e8e0; color: #2a3a38; }
 
-/* paginador */
 .paginador {
   display: flex;
   flex-wrap: wrap;
@@ -507,7 +496,6 @@ ol.lista-simple {
   color: var(--text-muted);
 }
 
-/* formularios */
 .admin-dos-columnas {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
@@ -552,7 +540,6 @@ ol.lista-simple {
   margin-top: 1.4rem;
 }
 
-/* catálogos */
 .catalogos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -595,7 +582,6 @@ ol.lista-simple {
   min-height: 40px;
 }
 
-/* pantallas medianas y pequeñas */
 @media (max-width: 1100px) {
   .cifras {
     grid-template-columns: repeat(2, minmax(0, 1fr));

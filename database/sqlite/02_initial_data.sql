@@ -65,7 +65,6 @@ VALUES
     (3, '2026-10-15 11:00:00', 'Visita realizada.', 'REALIZADA', 3, 5),
     (4, '2026-11-12 09:00:00', 'Solicitud cancelada.', 'CANCELADA', 4, 5);
 
--- Fotos de ejemplo (archivos en app/static/img/inmuebles)
 INSERT INTO imagen_inmueble (id_imagen, ruta, descripcion, orden, id_inmueble) VALUES
     (1, 'img/inmuebles/inmueble-1-1-fachada.svg', 'Fachada del edificio en Chapinero Alto', 1, 1),
     (2, 'img/inmuebles/inmueble-1-2-sala.svg', 'Sala con vista a los cerros', 2, 1),

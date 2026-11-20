@@ -1,4 +1,3 @@
-{# Carrusel de fotos de un inmueble. Usa "inmueble" e "imagenes". El comportamiento está en static/js/carrusel.js #}
 {% set total = imagenes|length %}
 <section class="galeria" data-carrusel data-total="{{ total }}" aria-roledescription="carrusel" aria-label="Fotos de {{ inmueble.titulo }}">
     <div class="galeria-escenario">

@@ -1,10 +1,4 @@
-"""
-Rutas del panel de administración.
 
-Seguridad en un solo lugar: antes de CUALQUIER ruta del blueprint se exige sesión
-iniciada y rol ADMINISTRADOR, y en todo POST se valida el token CSRF. Así una
-ruta nueva queda protegida sin tener que acordarse de decorarla.
-"""
 
 from datetime import date
 
@@ -49,17 +43,11 @@ def _descargar_csv(contenido, nombre):
     )
 
 
-# ------------------------------------------------------------------------------
-# Tablero
-# ------------------------------------------------------------------------------
 @admin_bp.route('/')
 def dashboard():
     return render_template('admin/dashboard.html', seccion='resumen', datos=DashboardService.obtener())
 
 
-# ------------------------------------------------------------------------------
-# Usuarios
-# ------------------------------------------------------------------------------
 @admin_bp.route('/usuarios')
 def usuarios():
     filas, pagina, filtros = UsuarioAdminService.listar(request.args)
@@ -146,9 +134,7 @@ def usuario_eliminar(id_usuario):
     return _volver(url_for('admin.usuarios'))
 
 
-# ------------------------------------------------------------------------------
-# Inmuebles
-# ------------------------------------------------------------------------------
+
 @admin_bp.route('/inmuebles')
 def inmuebles():
     filas, pagina, filtros = InmuebleAdminService.listar(request.args)
@@ -215,9 +201,6 @@ def inmueble_eliminar(id_inmueble):
     return _volver(url_for('admin.inmuebles'))
 
 
-# ------------------------------------------------------------------------------
-# Visitas
-# ------------------------------------------------------------------------------
 @admin_bp.route('/visitas')
 def visitas():
     filas, pagina, filtros = VisitaAdminService.listar(request.args)
@@ -243,9 +226,6 @@ def visita_estado(id_visita):
     return _volver(url_for('admin.visitas'))
 
 
-# ------------------------------------------------------------------------------
-# Catálogos
-# ------------------------------------------------------------------------------
 @admin_bp.route('/catalogos')
 def catalogos():
     return render_template('admin/catalogos.html', seccion='catalogos', **CatalogoService.obtener_todo())

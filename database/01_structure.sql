@@ -131,12 +131,6 @@ CREATE INDEX `idx_visita_comprador` ON `visita`(`id_comprador`);
 CREATE INDEX `idx_visita_estado` ON `visita`(`estado`);
 CREATE INDEX `idx_visita_fecha` ON `visita`(`fecha_visita`);
 
--- ------------------------------------------------------------------------------
--- 8. Tabla: imagen_inmueble
--- Fotos de cada inmueble. "ruta" es relativa a la carpeta static/ y "orden"
--- define la secuencia del carrusel (la primera, orden 1, es la portada).
--- Si se borra un inmueble sus fotos se borran con él (CASCADE).
--- ------------------------------------------------------------------------------
 CREATE TABLE `imagen_inmueble` (
     `id_imagen` INT AUTO_INCREMENT PRIMARY KEY,
     `ruta` VARCHAR(255) NOT NULL,

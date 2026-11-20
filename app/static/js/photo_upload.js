@@ -1,10 +1,4 @@
-/*
- * Formulario de publicar / editar inmueble:
- *   - elegir o arrastrar fotos y verlas antes de guardar
- *   - quitar fotos nuevas, ampliarlas y elegir la portada
- *   - tarjeta de vista previa que se actualiza mientras se escribe
- * Los archivos se validan de nuevo en el servidor (services.py, ImagenService).
- */
+
 (function () {
   'use strict';
 
@@ -25,7 +19,6 @@
 
   let nuevas = []; // { archivo, url }
 
-  // ------------------------------------------------------------------ utilidades
   function el(etiqueta, clases, texto) {
     const nodo = document.createElement(etiqueta);
     if (clases) nodo.className = clases;
@@ -52,7 +45,6 @@
     return existentes.filter(function (item) { return !existenteQuitada(item); });
   }
 
-  // Lo que se verá en el sitio, en orden: fotos actuales que se quedan + fotos nuevas
   function fotosFinales() {
     const portada = formulario.querySelector('input[name="portada"]:checked');
     const vigentes = existentesVigentes();
@@ -68,9 +60,7 @@
       }));
   }
 
-  // ------------------------------------------------------------ archivos nuevos
   function sincronizarEntrada() {
-    // El <input> es lo que se envía al servidor: se deja con las fotos que quedan
     const transferencia = new DataTransfer();
     nuevas.forEach(function (n) { transferencia.items.add(n.archivo); });
     entrada.files = transferencia.files;
@@ -146,7 +136,6 @@
     });
   }
 
-  // ------------------------------------------------------------ fotos actuales
   function pintarActuales() {
     const portada = formulario.querySelector('input[name="portada"]:checked');
     const vigentes = existentesVigentes();
@@ -176,7 +165,6 @@
     }
   });
 
-  // ------------------------------------------------------------ vista previa
   const vp = {
     foto: document.querySelector('[data-vp-foto]'),
     icono: document.querySelector('[data-vp-icono]'),
@@ -238,9 +226,7 @@
     actualizarVistaPrevia();
   }
 
-  // ------------------------------------------------------------ elegir y arrastrar
   entrada.addEventListener('change', function () {
-    // Al elegir de nuevo el navegador reemplaza la selección; se suma a la anterior
     const elegidas = Array.from(entrada.files);
     const previas = nuevas.map(function (n) { return n.archivo; });
     const soloNuevas = elegidas.filter(function (archivo) { return previas.indexOf(archivo) === -1; });

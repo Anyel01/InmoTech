@@ -1,9 +1,4 @@
-"""
-SQL del panel de administración.
 
-Igual que el resto de la aplicación: consultas parametrizadas y compatibles con
-MySQL y SQLite. Los listados reciben los filtros ya validados por los servicios.
-"""
 
 from app.db import get_db_cursor
 from app.repositories import COLUMNAS_FOTOS
@@ -22,9 +17,6 @@ def _paginar(sql, params, pagina, por_pagina):
     return sql, params
 
 
-# ------------------------------------------------------------------------------
-# Estadísticas del tablero
-# ------------------------------------------------------------------------------
 class EstadisticasRepository:
 
     @staticmethod
@@ -241,9 +233,6 @@ class AdminUsuarioRepository:
             return cursor.fetchall()
 
 
-# ------------------------------------------------------------------------------
-# Inmuebles
-# ------------------------------------------------------------------------------
 class AdminInmuebleRepository:
 
     @staticmethod
@@ -323,9 +312,6 @@ class AdminInmuebleRepository:
             return cursor.fetchall()
 
 
-# ------------------------------------------------------------------------------
-# Visitas
-# ------------------------------------------------------------------------------
 class AdminVisitaRepository:
 
     @staticmethod
@@ -388,9 +374,6 @@ class AdminVisitaRepository:
             return cursor.rowcount
 
 
-# ------------------------------------------------------------------------------
-# Catálogos: categorías, departamentos y ciudades
-# ------------------------------------------------------------------------------
 class CatalogoRepository:
     """
     Las tres tablas se manejan igual. Los nombres de tabla y de columna salen de

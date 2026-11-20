@@ -1,17 +1,9 @@
-/*
- * Fotos de los inmuebles:
- *   - carrusel con miniaturas, flechas, teclado y deslizar con el dedo
- *   - vista ampliada (visor) de una foto
- *   - vista rápida de un inmueble desde el catálogo
- *   - carrusel de tarjetas del inicio
- * Sin dependencias. Los estilos están en css/galeria.css.
- */
+
 (function () {
   'use strict';
 
   const reducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  // ------------------------------------------------------------------ utilidades
   function el(etiqueta, clases, atributos) {
     const nodo = document.createElement(etiqueta);
     if (clases) nodo.className = clases;
@@ -39,7 +31,6 @@
     document.documentElement.classList.toggle('con-modal', bloquear);
   }
 
-  // ------------------------------------------------------------ vista ampliada
   const Visor = (function () {
     let dialogo, imagen, pie, contador, anterior, siguiente;
     let fotos = [];
@@ -91,7 +82,6 @@
       anterior.addEventListener('click', function () { ir(indice - 1); });
       siguiente.addEventListener('click', function () { ir(indice + 1); });
 
-      // Clic en el fondo oscuro cierra la vista
       dialogo.addEventListener('click', function (e) {
         if (e.target === dialogo || e.target === marco || e.target === zona) dialogo.close();
       });
@@ -126,7 +116,6 @@
 
   window.InmoVisor = Visor;
 
-  // ------------------------------------------------------------------ carrusel
   function iniciarCarrusel(raiz) {
     const escenario = raiz.querySelector('.galeria-escenario');
     const pista = raiz.querySelector('.galeria-pista');
@@ -225,7 +214,6 @@
     return { ir: ir };
   }
 
-  // Arma el mismo HTML que la plantilla _galeria.html, a partir de datos JSON
   function construirGaleria(titulo, imagenes) {
     const raiz = el('section', 'galeria', { 'aria-roledescription': 'carrusel', 'aria-label': 'Fotos de ' + titulo });
     const escenario = el('div', 'galeria-escenario');
@@ -267,7 +255,6 @@
     return raiz;
   }
 
-  // -------------------------------------------------------------- vista rápida
   const VistaRapida = (function () {
     const cache = new Map();
     let dialogo, cuerpo;
@@ -377,7 +364,7 @@
     return { abrir: abrir };
   })();
 
-  // ---------------------------------------------------- carrusel de tarjetas
+
   function iniciarTarjetas(raiz) {
     const pista = raiz.querySelector('.tarjetas-pista');
     const anterior = raiz.querySelector('[data-tarjetas-prev]');
@@ -403,7 +390,6 @@
     actualizar();
   }
 
-  // -------------------------------------------------------------------- inicio
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('[data-carrusel]').forEach(iniciarCarrusel);
     document.querySelectorAll('[data-tarjetas]').forEach(iniciarTarjetas);

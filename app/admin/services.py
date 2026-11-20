@@ -1,9 +1,4 @@
-"""
-Reglas de negocio del panel de administración.
 
-Mismo contrato que app/services.py: validan, aplican las reglas y lanzan
-ValueError (dato inválido o acción no permitida) para que la ruta lo muestre.
-"""
 
 import csv
 import io
@@ -31,9 +26,6 @@ POR_PAGINA = 15
 EMAIL_REGEX = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 
 
-# ------------------------------------------------------------------------------
-# Utilidades de listados
-# ------------------------------------------------------------------------------
 def numero_o_none(valor):
     try:
         numero = int(valor)
@@ -89,9 +81,7 @@ def a_csv(columnas, filas):
     return '﻿' + salida.getvalue()
 
 
-# ------------------------------------------------------------------------------
-# Tablero
-# ------------------------------------------------------------------------------
+
 class DashboardService:
 
     @staticmethod
@@ -150,9 +140,7 @@ class DashboardService:
         return [{**f, 'ancho': round(f['total'] * 100 / mayor) if mayor else 0} for f in filas]
 
 
-# ------------------------------------------------------------------------------
-# Usuarios
-# ------------------------------------------------------------------------------
+
 class UsuarioAdminService:
 
     @staticmethod
@@ -281,9 +269,7 @@ class UsuarioAdminService:
         return usuario
 
 
-# ------------------------------------------------------------------------------
-# Inmuebles
-# ------------------------------------------------------------------------------
+
 class InmuebleAdminService:
 
     @staticmethod
@@ -361,9 +347,6 @@ class InmuebleAdminService:
         return inmueble
 
 
-# ------------------------------------------------------------------------------
-# Visitas
-# ------------------------------------------------------------------------------
 class VisitaAdminService:
 
     @staticmethod
@@ -407,9 +390,7 @@ class VisitaAdminService:
         return visita
 
 
-# ------------------------------------------------------------------------------
-# Catálogos
-# ------------------------------------------------------------------------------
+
 class CatalogoService:
 
     ETIQUETAS = {'categoria': 'categoría', 'departamento': 'departamento', 'ciudad': 'ciudad'}

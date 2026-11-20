@@ -61,7 +61,6 @@ CREATE TABLE IF NOT EXISTS imagen_inmueble (
     id_inmueble INTEGER NOT NULL REFERENCES inmueble(id_inmueble) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
--- Indices (mismos que en la version MySQL)
 CREATE INDEX IF NOT EXISTS idx_usuario_rol        ON usuario(id_rol);
 CREATE INDEX IF NOT EXISTS idx_ciudad_departamento ON ciudad(id_departamento);
 CREATE INDEX IF NOT EXISTS idx_inmueble_estado    ON inmueble(estado);

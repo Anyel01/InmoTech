@@ -1,10 +1,4 @@
-"""
-Panel de administración (rol ADMINISTRADOR).
 
-Tiene su propio blueprint y su propia pila: routes -> services -> repositories,
-igual que el resto de la aplicación pero separada, porque es un subsistema
-completo. Todas las rutas viven bajo /admin.
-"""
 
 from flask import Blueprint
 

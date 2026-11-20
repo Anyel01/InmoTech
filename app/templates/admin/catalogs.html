@@ -4,7 +4,6 @@
 {% block admin_titulo %}Catálogos{% endblock %}
 {% block admin_subtitulo %}<p>Las listas que usan los formularios: categorías de inmueble, departamentos y ciudades.</p>{% endblock %}
 
-{# Fila editable de un elemento del catálogo. Se elimina solo si no está en uso. #}
 {% macro fila(entidad, item, singular, plural, departamentos=None) %}
     <tr>
         <td>

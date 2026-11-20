@@ -1,7 +1,5 @@
-{# Piezas que se repiten en varias páginas del panel. Se importan con:
-   {% from 'admin/_macros.html' import paginador, boton_accion with context %} #}
 
-{# Paginador que conserva los filtros de la URL. Recibe el diccionario de paginar() #}
+
 {% macro paginador(pagina) %}
     {% if pagina.total %}
         <nav class="paginador" aria-label="Paginación">
@@ -34,7 +32,6 @@
     {% endif %}
 {% endmacro %}
 
-{# Formulario de un solo botón que cambia algo (estado, bloqueo...). Vuelve a la misma lista con sus filtros #}
 {% macro boton_accion(url, texto, clase='btn-outline', confirmar=None, campos=None, nombre_icono=None) %}
     <form method="POST" action="{{ url }}"{% if confirmar %} data-confirm="{{ confirmar }}"{% endif %} class="form-en-linea">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
